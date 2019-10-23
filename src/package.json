@@ -1,3 +1,7 @@
 {
-  "name": "src"
+  "name": "src",
+  "devDependencies": {
+    "@types/react-native-fbsdk": "^1.0.0",
+    "@types/react-redux": "^7.1.5"
+  }
 }

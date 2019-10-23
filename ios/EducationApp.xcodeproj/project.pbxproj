@@ -47,6 +47,7 @@
 		931169FC262745F5BC3FEFA1 /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4227D5996C0D40C483B57B4B /* Roboto-Black.ttf */; };
 		93C9B56815574C9F9DF28F90 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0EE29C87093449199FFEB8A5 /* FontAwesome.ttf */; };
 		9ABBCD5FAF0366D7DEF658AC /* libPods-EducationApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 467BFF35E046CB513ACB9A8F /* libPods-EducationApp-tvOS.a */; };
+		A2AEC72D2360497E00E9C556 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A2AEC72C2360497E00E9C556 /* GoogleService-Info.plist */; };
 		A6CE51F48FBD4E18AA9A6E1A /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DE6BF4E04CC54494B5B16B4F /* AntDesign.ttf */; };
 		B306B5AC50904D618ECAE77F /* OpenSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0480555BD52241ED9635471C /* OpenSans-ExtraBold.ttf */; };
 		B670AB1D2D564676BF7D46BB /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8B7F31EB91F741C581FCB9B8 /* FontAwesome5_Solid.ttf */; };
@@ -124,6 +125,7 @@
 		987B8A95C2D840DEB294BF90 /* Roboto-BlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-BlackItalic.ttf"; path = "../assets/fonts/Roboto/Roboto-BlackItalic.ttf"; sourceTree = "<group>"; };
 		990F1895E1904A4B84F9F8DE /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		9A0FDD43E8DC4A76BEADC842 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		A2AEC72C2360497E00E9C556 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A2B5CA3B9D5A4E7AB87C2244 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		A7047C6219D04C9183B9F001 /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Italic.ttf"; path = "../assets/fonts/Open_Sans/OpenSans-Italic.ttf"; sourceTree = "<group>"; };
 		A8929EFB08164E58A03D42B1 /* Roboto-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Light.ttf"; path = "../assets/fonts/Roboto/Roboto-Light.ttf"; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
+				A2AEC72C2360497E00E9C556 /* GoogleService-Info.plist */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
@@ -224,7 +227,6 @@
 				92E00AE11BB40BE948493D02 /* Pods-EducationAppTests.debug.xcconfig */,
 				D57F13DF01D23ADB35EC3CF5 /* Pods-EducationAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -352,7 +354,7 @@
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				73D22DB27B2CE153F96DB51E /* [CP] Copy Pods Resources */,
+				3FF8B27877411F3D796B830B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -414,6 +416,9 @@
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						DevelopmentTeam = 2NR5982J88;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -499,6 +504,7 @@
 				86DAE126BDB14CBDA53BA18B /* Roboto-MediumItalic.ttf in Resources */,
 				CCA4E0A072654F6EA02D5568 /* Roboto-Regular.ttf in Resources */,
 				6D99AA25917C4DE8A562D2E2 /* Roboto-Thin.ttf in Resources */,
+				A2AEC72D2360497E00E9C556 /* GoogleService-Info.plist in Resources */,
 				D4ECC9CD2D0F4A30B6A77039 /* Roboto-ThinItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -571,35 +577,15 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		614A80A6EA5FA766B131DB0D /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-EducationApp-tvOS-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		73D22DB27B2CE153F96DB51E /* [CP] Copy Pods Resources */ = {
+		3FF8B27877411F3D796B830B /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-EducationApp/Pods-EducationApp-resources.sh",
+				"${PODS_ROOT}/FBSDKCoreKit/FacebookSDKStrings.bundle",
+				"${PODS_ROOT}/GoogleSignIn/Resources/GoogleSignIn.bundle",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -619,6 +605,8 @@
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/FacebookSDKStrings.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleSignIn.bundle",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AntDesign.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Entypo.ttf",
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/EvilIcons.ttf",
@@ -639,6 +627,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-EducationApp/Pods-EducationApp-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		614A80A6EA5FA766B131DB0D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-EducationApp-tvOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9F1ED239B7B876F323E245E0 /* [CP] Check Pods Manifest.lock */ = {
@@ -838,6 +848,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = 2NR5982J88;
 				INFOPLIST_FILE = EducationApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -845,7 +856,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.nativeNew.example.EducationApp;
 				PRODUCT_NAME = EducationApp;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
@@ -857,6 +868,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 2NR5982J88;
 				INFOPLIST_FILE = EducationApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -864,7 +876,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.nativeNew.example.EducationApp;
 				PRODUCT_NAME = EducationApp;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
