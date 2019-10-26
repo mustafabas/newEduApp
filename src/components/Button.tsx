@@ -37,7 +37,7 @@ export class Button extends Component<Props, {}>{
         <TouchableOpacity  {...this.props} style={[styles.buttonStyle,this.props.style]}>
   
          
-        <ActivityIndicator/>
+        <ActivityIndicator color="white"/>
   
       </TouchableOpacity>
       );
@@ -46,7 +46,7 @@ export class Button extends Component<Props, {}>{
 
     return(
 
-      <TouchableOpacity  {...this.props} disabled={IsDisabled} style={[styles.buttonStyle,this.props.style, {backgroundColor:IsDisabled ? '#b09295' : '#db5c6b',shadowColor : IsDisabled ? '#b09295' : '#db5c6b'}]}>
+      <TouchableOpacity  {...this.props} disabled={IsDisabled} style={[styles.buttonStyle,{backgroundColor:IsDisabled ? '#b09295' : '#db5c6b',shadowColor : IsDisabled ? '#b09295' : '#db5c6b'},this.props.style]}>
 
        
         <Text style = {styles.buttonTextStyle}>

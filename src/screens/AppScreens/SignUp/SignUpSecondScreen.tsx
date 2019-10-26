@@ -12,10 +12,13 @@ import * as Yup from "yup";
 import {Text} from 'react-native-elements'
 import Icon from "react-native-vector-icons/SimpleLineIcons";
 import { savePassword } from "../../../redux/actions/signupActions";
-import { Input, Button, FloatingLabelInput } from "../../../components";
+import {Input} from 'react-native-elements'
+import {  Button, FloatingLabelInput } from "../../../components";
+import { showMessage, } from "react-native-flash-message";
 import styles from "../../AuthScreens/Login/styles";
 import { AppState } from "../../../redux/store";
 import { connect } from "react-redux";
+
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
   isLoadingCheck : boolean;
@@ -31,13 +34,16 @@ interface userData {
 
 const loginSchema = Yup.object().shape({
   password: Yup.string()
-    .matches(/^[a-zA-Z]+(\s?[a-zA-z]+)*$/)
-    .min(6)
-    .max(16)
-    .required()
+  .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
+  .min(6)
+  .max(16)
+  .required()
 });
 
 class SignUpSecondScreen extends Component<Props, {}> {
+
+
+
   handleLogin = (values: userData) => {
     const { navigation,savePassword } = this.props;
     savePassword(values.password)
@@ -45,9 +51,7 @@ class SignUpSecondScreen extends Component<Props, {}> {
   };
 
   render() {
-    if(this.props.isSucceedCheck){
-      this.props.navigation.navigate("SignUpSecond");
-    }
+   
     return (
       <View style={[styles.container, {justifyContent:'flex-start' ,marginTop:50}] }>
         <KeyboardAvoidingView
@@ -59,9 +63,7 @@ class SignUpSecondScreen extends Component<Props, {}> {
               initialValues={{ password: ""}}
               validationSchema={loginSchema}
               onSubmit={values => this.handleLogin(values)
-              
               }
-
             >
               {props => {
                 console.log(props, "fdsfsdfdsf");
@@ -78,11 +80,15 @@ class SignUpSecondScreen extends Component<Props, {}> {
                     <View style={[styles.inputContainer,{padding:10,marginTop:20}]}>
                         
                       <Input
+                       inputStyle={{fontFamily:'OpenSans-Regular',fontSize:15}}
+                        
                         placeholder="password"
                         value={props.values.password}
                         onChangeText={props.handleChange("password")}
                         onBlur={props.handleBlur("password")}
-                        error={props.touched.password && props.errors.password}
+                        errorMessage= "Lutfen uygun bir sifre girin"
+                        errorStyle={{height: (props.touched.password && props.errors.password) ? 20 : 0,color:'#a31515'}}
+                        secureTextEntry
                       />
                      
                       
@@ -102,6 +108,7 @@ class SignUpSecondScreen extends Component<Props, {}> {
             </Formik>
           </ScrollView>
         </KeyboardAvoidingView>
+
       </View>
     );
   }

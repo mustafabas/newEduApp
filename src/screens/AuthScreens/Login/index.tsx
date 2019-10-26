@@ -6,11 +6,12 @@ import {
   ScrollView,
   Platform, TouchableOpacity,Alert
 } from "react-native";
+import { WebView } from 'react-native-webview';
 import { NavigationScreenProp, NavigationState } from "react-navigation";
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { loginFirstStep} from "../../../redux/actions/LoginActions";
+import { loginFirstStep,socialLogin, socialTypes} from "../../../redux/actions/LoginActions";
 import {Input,Image, Avatar,Icon,Button as NewButton} from 'react-native-elements'
 import { Button, FloatingLabelInput } from "../../../components";
 import { AppState } from '../../../redux/store'
@@ -19,17 +20,17 @@ import { colors } from "../../../constants";
 import styles from "./styles";
 import LinearGradient from 'react-native-linear-gradient';
 import FlashMessage,{ showMessage, hideMessage, } from "react-native-flash-message";
-import { LoginManager, AccessToken } from 'react-native-fbsdk';
-import { GoogleSignin,statusCodes, GoogleSigninButton } from '@react-native-community/google-signin';
+import { GoogleSignin } from '@react-native-community/google-signin';
+
 import LinkedInModal,{LinkedInToken} from 'react-native-linkedin'
-import LinkedInSDK from 'react-native-linkedin-sdk';
+
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
   isFinished : boolean;
   isSucceed : boolean;
   isLoading : boolean;
   loginFirstStep : (email : string , password : string ) => void;
-
+  socialLogin : (socialType :socialTypes, data? : LinkedInToken) => void;
 }
 interface userData {
   email: string;
@@ -41,12 +42,11 @@ interface userData {
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
-    .matches(/^[a-zA-Z0-9_-]+$/)
+    .email('email required')
     .min(4)
-    .max(16)
     .required(),
   password: Yup.string()
-    .matches(/^[a-zA-Z]+(\s?[a-zA-z]+)*$/)
+    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)
     .min(6)
     .max(16)
     .required()
@@ -59,19 +59,47 @@ class Login extends Component<Props, {}> {
     if (this.props.isFinished && (!this.props.isSucceed)) {
 
       showMessage({
-        message: "Kullanici Adi veya yanlis",
+        message: "Email veya sifre hatali",
         type: "danger",
+        icon: 'auto'
       }
-      
       );
-
     }
   
   }
 
+  constructor(props) {
+    super(props);
+    // create a ref to store the textInput DOM element
+    this.linkedRef = React.createRef<LinkedInModal>()
+    this.renderLinkedin = this.renderLinkedin.bind(this);
+  }
 
+
+
+linkedRef = React.createRef<LinkedInModal>()
+
+renderLinkedin(){
   
+  return (
 
+
+   <NewButton titleStyle={{color:"black",fontFamily:'OpenSans-Regular',marginLeft:5}} containerStyle={{flex:0.5}} buttonStyle={{backgroundColor:'white',
+              shadowColor: '#6e72ff',
+              shadowOffset: {width: 3, height: 3 },
+              shadowOpacity: .5,paddingHorizontal:20}}
+              onPress={()=> this.linkedRef.current.open()}
+              icon={
+              
+      <Image style={{width:32,height:32}} source={require('../../../assets/linkedin.png')} />
+
+  } title="Linkedin" >
+                {/*  */}
+               </NewButton>
+
+  );
+  
+}
  
   handleLogin = (values: userData) => {
     console.log("asd "+this.props.isLoading)
@@ -85,61 +113,12 @@ class Login extends Component<Props, {}> {
       
 
   };
-signIn = async () => {
-  try {
-    await GoogleSignin.hasPlayServices();
-    const userInfo = await GoogleSignin.signIn();
-    console.log(userInfo)
-  } catch (error) {
-   if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        // sign in was cancelled
-        Alert.alert('cancelled');
-      } else if (error.code === statusCodes.IN_PROGRESS) {
-        // operation in progress already
-        Alert.alert('in progress');
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        Alert.alert('play services not available or outdated');
-      } else {
-        Alert.alert('Something went wrong', error.toString());
-        console.log(error)
-      }
-  }
-};
 
-getLinkedinUser = async (data: LinkedInToken) => {
-    const { access_token, authentication_code } = data
-    if (!authentication_code) {
-      this.setState({ refreshing: true })
 
-      const response = await fetch('https://api.linkedin.com/v2/me', {
-        method: 'GET',
-        headers: {
-          Authorization: 'Bearer ' + access_token,
-        },
-      })
-      const payload = await response.json()
-      console.log(payload)
-      this.setState({ ...payload, refreshing: false })
-    } else {
-      alert(`authentication_code = ${authentication_code}`)
-    }
-  }
  
-  handleFacebookLogin () {
-    LoginManager.logInWithPermissions(['public_profile', 'email', 'user_friends']).then(
-      function (result) {
-        if (result.isCancelled) {
-          console.log('Login cancelled')
-        } else {
-          console.log('Login success with permissions: ' + result.grantedPermissions.toString())
-        }
-      },
-      function (error) {
-        console.log('Login fail with error: ' + error)
-      }
-    )
-  }
- linkedRef = React.createRef<LinkedInModal>()
+
+ 
+ 
   render() {
     GoogleSignin.configure({
   iosClientId: '783786716269-c7k7r5hbfsd3t4oqu7df96c2c89ipqb0.apps.googleusercontent.com', // only for iOS
@@ -168,7 +147,7 @@ getLinkedinUser = async (data: LinkedInToken) => {
 
             <Formik
               initialValues={{ email: "", password: "" }}
-              // validationSchema={loginSchema}
+              validationSchema={loginSchema}
               onSubmit={values => this.handleLogin(values)}
             >
               {props => {
@@ -208,7 +187,7 @@ getLinkedinUser = async (data: LinkedInToken) => {
                         onChangeText={props.handleChange("password")}
                         onBlur={props.handleBlur("password")}
                         secureTextEntry
-                        errorMessage= "Lutfen uygun bir kullanici adi girin"
+                        errorMessage= "Lutfen uygun bir sifre girin"
                         errorStyle={{height: (props.touched.password && props.errors.password) ? 20 : 0,color:'#a31515'}}
                           />
                           <View style={{flexDirection:'row',justifyContent:'space-between',marginLeft:15}}>
@@ -226,48 +205,42 @@ getLinkedinUser = async (data: LinkedInToken) => {
                       
 
                         <Button IsDisabled={false} loading={this.props.isLoading} text="Giriş Yap" style={{marginHorizontal:10}} onPress={props.handleSubmit} />
-                        <Button loading={false} IsDisabled={false} onPress={this.handleFacebookLogin} text="Facebookla Baglan" style={{ marginHorizontal:10, borderRadius:5,backgroundColor:'#4267B2',shadowColor: '#4267B2',marginTop:0}}  />
-                        <GoogleSigninButton
-    style={{ width: 192, height: 48 }}
-    size={GoogleSigninButton.Size.Wide}
-    color={GoogleSigninButton.Color.Dark}
-    onPress={this.signIn}
-     />
-      <LinkedInModal
+                        <Button loading={false} IsDisabled={false} onPress={()=>this.props.socialLogin(socialTypes.FACEBOOK)} text="Facebookla Baglan" style={{ marginHorizontal:10, borderRadius:5,backgroundColor:'#4267B2',shadowColor: '#4267B2',marginTop:0}}  />
 
-          ref={this.linkedRef}
-          clientID="86z87ykbd1gd7o"
-          clientSecret="gacKGywa0D8jFjeH"
-          redirectUri="http://ikonegitim.com"
-          onSuccess={token => this.getLinkedinUser(token)}
-          permissions={
-            ['r_liteprofile', 'r_emailaddress']
-          }
-          onError={err => console.log(err)}
-
-        />
-        <Button title="Log Out"  />
      
-                        <View style={{flexDirection:'row',marginHorizontal:10,justifyContent:'space-evenly',flex:1,marginBottom:10}}>
-              <NewButton titleStyle={{color:"black",fontFamily:'OpenSans-Regular',marginLeft:5}} containerStyle={{flex:0.5,marginRight:20}} buttonStyle={{backgroundColor:'white',
+                        <View style={{flexDirection:'row',marginHorizontal:10,flex:1,marginBottom:10,justifyContent:'space-between'}}>
+              <NewButton titleStyle={{color:"black",fontFamily:'OpenSans-Regular',marginLeft:5}} buttonStyle={{backgroundColor:'white',
               shadowColor: '#6e72ff',
               shadowOffset: {width: 3, height: 3 },
-              shadowOpacity: .5,}}
-              icon={
+              shadowOpacity: .5,paddingHorizontal:25}}
+              onPress={()=>this.props.socialLogin(socialTypes.GOOGLE)}
 
+              icon={
+              
       <Image style={{width:32,height:32}} source={require('../../../assets/iconGoogle2.png')} />
 
   } title="Google" >
                 {/*  */}
                </NewButton>
 
-            <NewButton titleStyle={{color:'black',fontFamily:'OpenSans-Regular',marginLeft:5}} title="Linkedin" buttonStyle={{backgroundColor:'white'}} containerStyle={{flex:.5,borderRadius:5,shadowColor: '#6e72ff',
-    shadowOffset: {width: 3, height: 3 },
-    shadowOpacity: .5,}}   icon={
+          
 
-      <Image style={{width:32,height:32}} source={require('../../../assets/linkedin.png')} />
+<LinkedInModal
 
-  } />
+renderButton={this.renderLinkedin}
+linkText="Linkedin"
+ref={this.linkedRef}
+clientID="86z87ykbd1gd7o"
+clientSecret="gacKGywa0D8jFjeH"
+redirectUri="http://ikonegitim.com"
+onSuccess={token => this.props.socialLogin(socialTypes.LINKEDIN,token)}
+permissions={
+  ['r_liteprofile', 'r_emailaddress','w_member_social']
+}
+onError={err => console.log(err)}
+
+/>
+
                     
               </View>
                       
@@ -309,8 +282,9 @@ const mapStateToProps = (state : AppState) => ({
 function bindToAction(dispatch : any) {
   return {
     loginFirstStep : (email:string , password : string) =>
-    dispatch(loginFirstStep(email,password))
- 
+    dispatch(loginFirstStep(email,password)),
+    socialLogin : (socialType : socialTypes , data? : LinkedInToken) =>
+    dispatch(socialLogin(socialType, data))
   };
 
 }

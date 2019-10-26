@@ -13,6 +13,14 @@ export const LOGIN_SUCCEED = "loginSucceed";
 export const LOGIN_FAILED = "loginFailed";
 
 
+export const PHONE_CODE_FAILED = 'phoneCodeFailed';
+export const PHONE_CODE_RECEIVED_FAILED = 'phoneCodeReceivedFailed'
+export const PHONE_CODE_RECEIVED_SUCCEED = 'phoneCodeReceivedSucceed'
+
+
+export const PHONE_CODE_COMPARE_STARTED = 'phoneCodeCompareStarted';
+export const PHONE_CODE_COMPARE_SUCCEED = 'phoneCodeCompareSucceed';
+export const PHONE_CODE_COMPARE_FAILED = 'phoneCodeCompareFailed';
 
 export const HOME_LOADING = "home_Loading";
 export const HOME_GET_COURSE ="homeGetVideos";
@@ -25,3 +33,8 @@ export const RESET_PROPS = "resetProps";
 
 export const CART_GET_COURSE = "cartGetCourses";
 export const CART_LOADING = "cartLoading";
+
+
+export const ERROR_CODE = "errorCode";
+
+export const COUNT_DOWN = "countDown"

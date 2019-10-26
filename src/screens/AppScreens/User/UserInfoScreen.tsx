@@ -61,8 +61,8 @@ class UserInfoScreen extends Component<Props, {}> {
   
 
   componentWillMount() {
-    DeviceInfo.hasNotch().then(hasNotch => {
-    })
+    // DeviceInfo.hasNotch().then(hasNotch => {
+    // })
   }
   render() {
     return (

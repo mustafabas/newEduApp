@@ -35,9 +35,8 @@ interface userMail {
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
-    .matches(/^[a-zA-Z0-9_-]+$/)
     .min(4)
-    .max(16)
+    .email()
     .required()
 
 });
@@ -50,6 +49,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
       showMessage({
         message: "Bu email sistemde Kayitlidir",
         type: "danger",
+        icon: 'auto'
       }
       );
     }
@@ -78,7 +78,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
           <ScrollView  bounces={false}>
             <Formik
               initialValues={{ email: "" }}
-
+              validationSchema={loginSchema}
               onSubmit={ val=> this.handleLogin(val)}
             >
               {props => {
@@ -104,12 +104,13 @@ class SignUpFirstScreen extends Component<Props, {}> {
                         onBlur={props.handleBlur("email")}
                         // error={props.touched.email && props.errors.email}
                         errorMessage= "Lutfen uygun bir kullanici adi girin"
-                        errorStyle={{height: (props.touched.email && props.errors.email) ? 20 : 0}}
+                        errorStyle={{height: (props.touched.email && props.errors.email) ? 20 : 0,color:'#a31515'}}
+                        
                         
                       />
                      
                       
-                        <Button loading={this.props.isLoadingCheck}  text="Continue" onPress={props.handleSubmit} />
+                        <Button loading={this.props.isLoadingCheck}  text="Continue" onPress={()=> props.handleSubmit()} />
                         
                        
                       
@@ -125,7 +126,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
         </KeyboardAvoidingView>
         {this.showSimpleMessage()}
 
-        <FlashMessage position="top" />
+
       </View>
     );
   }

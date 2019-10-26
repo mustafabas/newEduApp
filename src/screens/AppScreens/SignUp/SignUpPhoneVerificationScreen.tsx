@@ -11,47 +11,72 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 import Icon from "react-native-vector-icons/SimpleLineIcons";
-import { createUser } from "../../../redux/actions/signupActions";
+import { createUser,sendPhone,compareCodes,countDownForCircle,beforeResendCode } from "../../../redux/actions/signupActions";
 import {Input,Text} from 'react-native-elements'
 import {  Button, FloatingLabelInput } from "../../../components";
 import styles from "../../AuthScreens/Login/styles";
 import { AppState } from "../../../redux/store";
 import { connect } from "react-redux";
 import ProgressCircle from 'react-native-progress-circle'
+import { showMessage, } from "react-native-flash-message";
+
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
   isLoadingCheck : boolean;
   isFinishedCheck: boolean;
   isSucceedCheck : boolean;
+  isLoadingCheckSecond : boolean;
+  isFinishedCheckSecond : boolean;
+  isSucceedCheckSecond : boolean
   createUser : (phoneNumber : string) => void;
-
+  sendPhone : (phoneNumber : string) => void;
+  compareCodes : (phoneCode : string, phoneNumber : string) => void;
+  error : string;  
+  countDownForCircle : (isFinished : boolean) =>void;
+  countDown : number;
+  beforeResendCode : () => void;
 
 }
 interface userData {
   phone : string;
+  phoneCode  :String;
 
 }
 
 const loginSchema = Yup.object().shape({
-  password: Yup.string()
-    .matches(/^[a-zA-Z]+(\s?[a-zA-z]+)*$/)
-    .min(6)
-    .max(16)
+  phone: Yup.string()
+    .min(10)
+    .max(13)
     .required()
 });
 
 
 class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
+  showSimpleMessage() {
+    
+    if ((this.props.isFinishedCheck && (!this.props.isSucceedCheck)) || (this.props.isFinishedCheckSecond && (!this.props.isSucceedCheckSecond))) {
+
+      showMessage({
+        message: this.props.error,
+        type: "danger",
+        icon: 'auto'
+      }
+      );
+    }
+  }
+
   handleLogin = (values: userData) => {
     const { navigation, } = this.props;
     console.log("number" + values.phone)
-    this.props.createUser(values.phone)
-
+    this.props.sendPhone(values.phone)
+    this.setTimer()
   };
 
-  componentDidMount() {
-    this.interval = setInterval(() => this.tick(), 1000);
+
+  setTimer() {
+      this.interval = setInterval(() => this.tick(), 1000);
   }
+ 
   componentWillUnmount() {
     clearInterval(this.interval)
   }
@@ -59,27 +84,27 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
 
   constructor(props){
     super(props);
-    this.state = {
-      countDown:50
-    }
  
   }
   tick() {
-      if(this.state.countDown!=0){
-        this.setState(prevState => ({
-            countDown: prevState.countDown -1
-        }));
-      }}
+      if(this.props.countDown> 0) {
+        this.props.countDownForCircle(false)
+      }
+      else {
+        clearInterval(this.interval)
+        this.props.beforeResendCode()
+      }
+    }
 
 
       confirmAgain(){
-        this.setState({countDown:60})
+        this.props.countDownForCircle(false)
 
     }
   progressCircleRender(){
     return(
         <ProgressCircle
-        percent={100*this.state.countDown/60}
+        percent={100*this.props.countDown/40}
         radius={50}
         borderWidth={8}
         color="#db5c6b"
@@ -88,7 +113,7 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
     >
 
     
-        <Text style={{ fontSize: 25 ,}}>{this.state.countDown}</Text>
+        <Text style={{ fontSize: 25 }}>{this.props.countDown}</Text>
     </ProgressCircle>
 
     );
@@ -97,22 +122,17 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
 
 
   render() {
-    if(this.props.isSucceedCheck){
-      this.props.navigation.navigate("SignUpPhoneVerify");
-    }
+    
     return (
       <View style={[styles.container, {justifyContent:'flex-start' ,marginTop:50}] }>
         <KeyboardAvoidingView
-
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <ScrollView  bounces={false}>
             <Formik
-              initialValues={{ phone: ""}}
-              // validationSchema={loginSchema}
-              onSubmit={values => this.handleLogin(values)
-              
-              }
+              initialValues={{ phone: "", phoneCode : ""}}
+              validationSchema={loginSchema}
+              onSubmit={values => this.handleLogin(values)}
 
             >
               {props => {
@@ -139,7 +159,6 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
                         maxLength={3}
                         placeholder="+90"
                         defaultValue="+90"
-
                         onChangeText={props.handleChange("password")}
                         onBlur={props.handleBlur("password")}
                         inputStyle={{fontFamily:'OpenSans-Regular'}}
@@ -154,17 +173,21 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
                         onChangeText={props.handleChange("phone")}
                         onBlur={props.handleBlur("phone")}
                         inputStyle={{fontFamily:'OpenSans-Regular'}}
-
+                        errorMessage= "Lutfen uygun bir telefon numarasi giriniz"
+                        errorStyle={{height: (props.touched.phone && props.errors.phone) ? 20 : 0,color:'#a31515'}}
+                        
                       />
                       </View>
                      
                       <View style={{flexDirection:'row'}}>
-                          <Input keyboardType="numeric" inputStyle={{fontFamily:'OpenSans-Regular'}} maxLength={4} containerStyle={{flex:0.6,marginTop:15}} placeholder="Pin Girisi" />
-                      <Button IsDisabled={false} text="Gonder" style={{flex:0.4}} loading={this.props.isLoadingCheck} onPress={props.handleSubmit} />
+                          <Input keyboardType="numeric" onChangeText={props.handleChange("phoneCode")}
+                        onBlur={props.handleBlur("phoneCode")}
+                         value={props.values.phoneCode} inputStyle={{fontFamily:'OpenSans-Regular'}} maxLength={6} containerStyle={{flex:0.6,marginTop:15}} placeholder="Pin Girisi" />
+                      <Button IsDisabled={this.props.isFinishedCheck && this.props.isSucceedCheck} text="Gonder" style={{flex:0.4}} loading={this.props.isLoadingCheck} onPress={()=>props.handleSubmit()} />
                         
                       </View>
                         
-                      <Button IsDisabled={this.props.isFinishedCheck} text="Onayla" loading={this.props.isLoadingCheck} style={{opacity:199}}  onPress={() =>this.props.navigation.navigate('mainBottomTab')} />
+                      <Button IsDisabled={!(this.props.isFinishedCheck) && !(props.values.phoneCode.length===6)} text="Onayla" loading={this.props.isLoadingCheckSecond} style={{opacity:199}}  onPress={() =>this.props.compareCodes(props.values.phoneCode,props.values.phone)} />
                     
                       
                       
@@ -180,6 +203,7 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
             </Formik>
           </ScrollView>
         </KeyboardAvoidingView>
+        {this.showSimpleMessage()}
       </View>
     );
   }
@@ -189,15 +213,26 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
 const mapStateToProps = (state : AppState) => ({
   isFinishedCheck : state.signup.isFinishedCheck,
   isLoadingCheck : state.signup.laodingCheck,
-  isSucceedCheck : state.signup.isSucceedCheck
-
+  isSucceedCheck : state.signup.isSucceedCheck,
+  isFinishedCheckSecond : state.signup.isFinishedCheckSecond,
+  isSucceedCheckSecond : state.signup.isSucceedCheckSecond,
+  isLoadingCheckSecond : state.signup.isLoadingCheckSecond,
+  error : state.signup.error,
+  countDown : state.signup.countDown,
 })
 
 function bindToAction(dispatch : any) {
   return {
     createUser : (phoneNumber : string) =>
-    dispatch(createUser(phoneNumber))
-
+    dispatch(createUser(phoneNumber)),
+    sendPhone : (phoneNumber : string) =>
+    dispatch(sendPhone(phoneNumber)),
+    compareCodes : (phoneCode : string, phoneNumber : string) => 
+    dispatch(compareCodes(phoneCode,phoneNumber)),
+    countDownForCircle : (isFinished : boolean) => 
+    dispatch(countDownForCircle(isFinished)),
+    beforeResendCode : () => 
+    dispatch(beforeResendCode())
   };
 }
 
