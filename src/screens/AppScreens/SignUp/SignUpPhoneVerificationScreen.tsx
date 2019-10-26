@@ -183,7 +183,7 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
                           <Input keyboardType="numeric" onChangeText={props.handleChange("phoneCode")}
                         onBlur={props.handleBlur("phoneCode")}
                          value={props.values.phoneCode} inputStyle={{fontFamily:'OpenSans-Regular'}} maxLength={6} containerStyle={{flex:0.6,marginTop:15}} placeholder="Pin Girisi" />
-                      <Button IsDisabled={this.props.isFinishedCheck && this.props.isSucceedCheck} text="Gonder" style={{flex:0.4}} loading={this.props.isLoadingCheck} onPress={()=>props.handleSubmit()} />
+                      <Button IsDisabled={(this.props.isFinishedCheck && this.props.isSucceedCheck) || (this.props.countDown>0 && this.props.countDown<40)} text="Gonder" style={{flex:0.4}} loading={this.props.isLoadingCheck} onPress={()=>props.handleSubmit()} />
                         
                       </View>
                         
