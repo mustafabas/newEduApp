@@ -236,7 +236,7 @@ export default class CourseDetail extends Component<HomeScreenProps,{}> {
           <LessonSection></LessonSection>
           <LessonSection></LessonSection>
           <LessonSection></LessonSection>
-          <Button  onPress={()=>this.props.navigation.navigate('SignUpSecond')}> </Button>
+
         </Animated.ScrollView>
         <Animated.View
           pointerEvents="none"

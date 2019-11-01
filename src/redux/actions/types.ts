@@ -35,6 +35,15 @@ export const CART_GET_COURSE = "cartGetCourses";
 export const CART_LOADING = "cartLoading";
 
 
+export const ADDRESS_GET_CITY = "addressGetCity";
+export const ADDRESS_GET_LOCALITY = "addressGetLocality";
+export const ADDRESS_GET_DISTRICT = "addressGetDistrict";
+export const ADDRESS_GET_NEIGHBOOR = 'addressGetNeighboor';
+
+export const SWIPE_CARD = "swipeCard"
+
+export const ADRESS_LOADING = "addressLoading"
+
 export const ERROR_CODE = "errorCode";
 
 export const COUNT_DOWN = "countDown"

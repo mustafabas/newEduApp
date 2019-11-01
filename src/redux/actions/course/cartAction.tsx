@@ -1,13 +1,14 @@
 
 import { AsyncStorage } from "react-native";
 import axios from 'axios'
-import { EDU_API_LOGIN, EDU_API_GET_CART_LIST } from '../../../constants'
+import { EDU_API_LOGIN, EDU_API_GET_CART_LIST, EDU_API_BASE ,EDU_API_COURSE_BASE} from '../../../constants'
 import { Dispatch } from "react";
 import { CART_GET_COURSE,CART_LOADING } from './../types'
 import { Action } from "redux";
 import { ICourseItem } from "../../../models/course/coruseItem";
 import { ICourseItemRequest } from "../../../models/course/courseItemRequest";
 import { courseType, localType } from "./homeAction";
+
 
 
 
@@ -37,8 +38,6 @@ export function removeItemFromCart(id : string, list : ICourseItem[] ) {
 
 }
 
-
-
 export function getCart() {
     return async (dispatch : Dispatch<Action>) => {
         dispatch(loading(true));
@@ -48,56 +47,84 @@ export function getCart() {
         let newProduct : localType[] =[]
             if (products){
                 newProduct = await JSON.parse(products);
-
             }
-
+        
         console.log("hey" + newProduct)
         if(newProduct) {
 
             let courses = ""
-
-
             console.log('girdr' + products)
             if (newProduct){
-                newProduct.forEach((element :localType)=> {
-                    console.log("id" + element.id)
-                    courses = courses + element.id + ","
-                  });
-                  if(courses.length>1){
-                      console.log("222" +courses)
-                    courses = courses.substring(0,courses.length-1)
-                    console.log("ss"+courses)
-                    axios.get(EDU_API_GET_CART_LIST +"?courseTopicIds="+courses
-                    )
-      .then(async (response) =>{
-          if(response.data.isSuccess){
-           
-      
-            await response.data.result!.forEach((element:ICourseItemRequest) => {
-                courseItems!.push(
-                    ({
-                        id:element.courseTopicId,
-                        name:element.topicName,
-                        content:element.content,
-                        displayPrice:element.priceDisplayName,
-                        IsCheckout : true,
-                        courseType : newProduct.filter(val => (val.id === element.courseTopicId.toString()))[0].courseType
-                    }
-                ));
-            });
-            dispatch(cartData(courseItems));
-            dispatch(loading(false));
-          }  
-      }).catch((err) => {
-        loading(false);
-      });
-                  }
-                  else {
-                      console.log("sonunda")
-                      dispatch(cartData(courseItems));
-                  }
-                  
+                if(newProduct.some(val => val.courseType === courseType.COURSE_ALL)){
+                    courses = newProduct.find(val=> val.courseType === courseType.COURSE_ALL).id;
+                    axios.get(EDU_API_COURSE_BASE+`/${parseInt(courses)}`).then((res) => {
+                        if(res.data.isSuccess){
+                            console.log("yeppp")
+                            let data =  res.data.result
+                            courseItems!.push({
+                            id : data.courseId,
+                            name : data.courseName,
+                            displayPrice : data.displayPrice,
+                            price : data.price,
+                            })
+                            dispatch(cartData(courseItems));
+                        }
+                    })
+                }
+                else {
+
+                    newProduct.forEach((element :localType)=> {
+                        console.log("id" + element.id)
+                        courses = courses + element.id + ","
+    
+                      });
+                      console.log(courses)
+                      if(courses.length>1){
+                          console.log("222" +courses)
+                        courses = courses.substring(0,courses.length-1)
+                        console.log("ss"+courses)
+                        axios.get(EDU_API_GET_CART_LIST +"?courseTopicIds="+courses
+                        )
+          .then(async (response) =>{
+              console.log(response)
+              if(response.data.isSuccess){
+               
+          
+                await response.data.result!.forEach((element:ICourseItemRequest) => {
+                    courseItems!.push(
+                        ({
+                            id:element.courseTopicId,
+                            name:element.topicName,
+                            content:element.content,
+                            displayPrice:element.priceDisplayName,
+                            IsCheckout : true,
+                            courseType : newProduct.filter(val => (val.id === element.courseTopicId.toString()))[0].courseType,
+                            isOrdered : element.isOrdered,
+                            isAddedFromBase : false,
+                            price : element.price
+                        }
+                    ));
+                });
+                dispatch(cartData(courseItems));
+                dispatch(loading(false));
+              }  
+          }).catch((err) => {
+            loading(false);
+          });
+                      }
+                      else {
+                          console.log("sonunda")
+                          dispatch(cartData(courseItems));
+                      }
+                      
+                }
+                
+
+
             }
+
+
+
         }
         
     }
@@ -155,3 +182,8 @@ export const cartData = (response:ICourseItem[]) => ({
     type: CART_GET_COURSE,
     payload: response
 })
+
+
+
+
+

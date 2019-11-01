@@ -84,9 +84,10 @@ renderLinkedin(){
   return (
 
 
-   <NewButton titleStyle={{color:"black",fontFamily:'OpenSans-Regular',marginLeft:5}} containerStyle={{flex:0.5}} buttonStyle={{backgroundColor:'white',
+   <NewButton titleStyle={{color:"black",fontFamily:'OpenSans-Regular',marginLeft:5}}  buttonStyle={{backgroundColor:'white',
               shadowColor: '#6e72ff',
               shadowOffset: {width: 3, height: 3 },
+              flex:.5,
               shadowOpacity: .5,paddingHorizontal:20}}
               onPress={()=> this.linkedRef.current.open()}
               icon={
@@ -129,12 +130,7 @@ renderLinkedin(){
   accountName: '', // [Android] specifies an account name on the device that should be used
 })
 
-    if(this.props.isLoading){
-      console.log("yükleniyor");
-    }
-    if(this.props.isSucceed){
-      this.props.navigation.navigate("LoginPhoneVerify");
-    }
+
     return (
       <View style={styles.container}>
         {/* <LinearGradient style={{flex:1}} colors={['#ff4259', '#db5c6b', '#ffb5be']} > */}
@@ -147,7 +143,7 @@ renderLinkedin(){
 
             <Formik
               initialValues={{ email: "", password: "" }}
-              validationSchema={loginSchema}
+              // validationSchema={loginSchema}
               onSubmit={values => this.handleLogin(values)}
             >
               {props => {
@@ -204,17 +200,22 @@ renderLinkedin(){
                           </View>
                       
 
-                        <Button IsDisabled={false} loading={this.props.isLoading} text="Giriş Yap" style={{marginHorizontal:10}} onPress={props.handleSubmit} />
+                        <Button IsDisabled={false} loading={this.props.isLoading} text="Giriş Yap" style={{marginHorizontal:10}} 
+                        onPress={()=> props.handleSubmit()}
+
+                         />
                         <Button loading={false} IsDisabled={false} onPress={()=>this.props.socialLogin(socialTypes.FACEBOOK)} text="Facebookla Baglan" style={{ marginHorizontal:10, borderRadius:5,backgroundColor:'#4267B2',shadowColor: '#4267B2',marginTop:0}}  />
 
      
-                        <View style={{flexDirection:'row',marginHorizontal:10,flex:1,marginBottom:10,justifyContent:'space-between'}}>
+                        <View style={{flexDirection:'row',marginHorizontal:10,flex:1,marginBottom:10, justifyContent:'space-between'}}>
               <NewButton titleStyle={{color:"black",fontFamily:'OpenSans-Regular',marginLeft:5}} buttonStyle={{backgroundColor:'white',
               shadowColor: '#6e72ff',
               shadowOffset: {width: 3, height: 3 },
-              shadowOpacity: .5,paddingHorizontal:25}}
+                paddingHorizontal:10,   
+              shadowOpacity: .5,flex:.5}}
+              
               onPress={()=>this.props.socialLogin(socialTypes.GOOGLE)}
-
+              
               icon={
               
       <Image style={{width:32,height:32}} source={require('../../../assets/iconGoogle2.png')} />
@@ -233,7 +234,7 @@ ref={this.linkedRef}
 clientID="86z87ykbd1gd7o"
 clientSecret="gacKGywa0D8jFjeH"
 redirectUri="http://ikonegitim.com"
-onSuccess={token => this.props.socialLogin(socialTypes.LINKEDIN,token)}
+onSuccess={token => this.props.socialLogin(socialTypes.LINKEDIN,token)} 
 permissions={
   ['r_liteprofile', 'r_emailaddress','w_member_social']
 }
@@ -246,13 +247,6 @@ onError={err => console.log(err)}
                       
                       
                     </View>
-                    {/* <View style={{alignItems:'center',marginTop:20}}>
-                       <TouchableOpacity onPress={()=>this.props.navigation.navigate("SignUpStack")} style={{ marginTop: 10 }}>
-                        <Text style={{color:'blue'}} >
-                          Sign Up
-                          </Text>
-                          </TouchableOpacity >
-                    </View> */}
          
         
                   </View>
