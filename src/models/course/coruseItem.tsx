@@ -69,3 +69,12 @@ export interface IVideoModel {
     isFree : boolean;
 
 }
+
+export interface ICrediCartInfoRequestModel{
+    creditCardNumber:string;
+    month:string;
+    year:string;
+    cvv2:string;
+    nameSurname:string;
+    basketId:number;
+}

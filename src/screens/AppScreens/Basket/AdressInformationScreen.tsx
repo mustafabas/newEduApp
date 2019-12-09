@@ -11,15 +11,13 @@ import {
 
 import { connect } from "react-redux";
 
-import {
-  SafeAreaView
-} from 'react-navigation'
+
 import { Text ,Input, Overlay} from 'react-native-elements'
 import { Button, FloatingLabelInput, LessonSection } from "../../../components";
 import stylesNew from "../../AuthScreens/Login/styles";
 import DeviceInfo from 'react-native-device-info';
 import { adress, getAdressList, adressType ,getBasketId} from '../../../redux/actions/CheckoutActions'
-import { NavigationScreenProp } from 'react-navigation'
+import { NavigationScreenProp , SafeAreaView } from 'react-navigation'
 
 import Modal, { ModalContent,SlideAnimation } from 'react-native-modals';
 
@@ -28,9 +26,8 @@ import { AppState } from '../../../redux/store';
 import { ScrollView } from 'react-native-gesture-handler';
 import { IBasket } from '../../../models/course/coruseItem';
 import { Formik } from 'formik';
-
-import { WebView } from 'react-native-webview';
-
+import {WebView} from 'react-native-webview';
+import HTML from 'react-native-render-html';
 
 export interface Props {
   navigation: NavigationScreenProp<any, any>;
@@ -49,10 +46,6 @@ export interface Props {
 
 class AdressInformationScreen extends Component<Props, {}> {
 
-
-  
-
-  
 
 _renderDistrict() {
   if(this.props.adressDistrict.length>0){
@@ -410,8 +403,7 @@ _renderCity() {
     basket.orderType = this.state.radioSelected;
     basket.adressInfo = val
 
-    this.props.getBasketId(basket)
-    console.log(basket)
+    this.props.getBasketId(basket);
     
   }
 
@@ -470,12 +462,9 @@ _renderCity() {
     <ModalContent style={{flex:1}}>
 
    <View  style={{flex:1}}>
-   <WebView
-    scalesPageToFit = {false}
-        originWhitelist={['*']}
-        source={{uri : `https://www.ikonegitim.com/KrediKarti.aspx?code=317771&kullanici=10092`}}
-        style={{flex:1}}
-      />
+      <HTML >
+
+      </HTML>
    </View>
 
 

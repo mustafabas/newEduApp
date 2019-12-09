@@ -18,7 +18,7 @@ import { Text ,Input} from 'react-native-elements'
 import { Button, FloatingLabelInput, LessonSection } from "../../../components";
 import stylesNew from "../../AuthScreens/Login/styles";
 import DeviceInfo from 'react-native-device-info';
-import { cardSwiped } from '../../../redux/actions/CheckoutActions'
+import { cardSwiped,payWithCreditCard } from '../../../redux/actions/CheckoutActions'
 import { NavigationScreenProp } from 'react-navigation'
 
 import RNPicker from "rn-modal-picker";
@@ -26,8 +26,9 @@ import { AppState } from '../../../redux/store';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { Formik } from 'formik';
-
+import FlashMessage,{ showMessage, hideMessage, } from "react-native-flash-message";
 import { WebView } from 'react-native-webview';
+import { ICrediCartInfoRequestModel } from '../../../models/course/coruseItem';
 
 
 
@@ -35,9 +36,17 @@ export interface Props {
   navigation: NavigationScreenProp<any, any>;
   cardSwiped : (swiped : boolean) => void;
   isCardSwiped : boolean;
+  loadingCard:boolean;
+  CardErrorMessage:string;
+  payWithCreditCard: (creditCardInfo: ICrediCartInfoRequestModel) => void
 };
 
-
+interface creditCardData{
+  name:string;
+cardNumber:string;
+expireDate:string;
+cvv:string;
+}
 
 
 
@@ -55,6 +64,19 @@ class CreditCartScreen extends Component<Props, {}> {
       };
 
       
+  showSimpleMessage() {
+
+    if (this.props.CardErrorMessage) {
+
+      showMessage({
+        message: this.props.CardErrorMessage,
+        type: "danger",
+        icon: 'auto'
+      }
+      );
+    }
+  
+  }
       constructor(props) {
         super(props);
         this.state = { spinAnim: new Animated.Value(0),
@@ -70,12 +92,19 @@ class CreditCartScreen extends Component<Props, {}> {
 
 
      
-      handleLogin = () => {
+      handleLogin = (values: creditCardData) => {
        
-          console.log("sdsds")
-         
-          
-    
+     
+    const {  payWithCreditCard } = this.props;
+    var creditCardInfo:ICrediCartInfoRequestModel={
+      basketId:this.props.navigation.getParam("basketId"),
+creditCardNumber:values.cardNumber,
+cvv2:values.cvv,
+nameSurname:values.name,
+month:"04",
+year:"24"
+    };
+    payWithCreditCard(creditCardInfo);
       };
 
 
@@ -245,7 +274,7 @@ render(){
               style={{flex:1}}
               initialValues={{ name: "",cardNumber: "",cvv:"",expireDate:""}}
               // validationSchema={loginSchema}
-              onSubmit={values => this.handleLogin()}
+              onSubmit={values => this.handleLogin(values)}
             >
               {props => {
                 console.log(props, "fdsfsdfdsf");
@@ -335,8 +364,8 @@ errorStyle={{height: (props.touched.expireDate && props.errors.expireDate) ? 20 
 </View>
 
   <Button
-  onPress={()=> this.props.navigation.navigate('checkoutWeb')}
-   
+     onPress={()=> props.handleSubmit()}
+     loading={this.props.loadingCard}
    text="Odeme Yap" IsDisabled={!(props.values.cardNumber.length==16 && props.values.cvv.length==3 && props.values.expireDate.length==4 && props.values.name.length>5)} />
 
                     </View>
@@ -345,6 +374,7 @@ errorStyle={{height: (props.touched.expireDate && props.errors.expireDate) ? 20 
             </Formik>
             </ScrollView>
             </KeyboardAvoidingView>
+            {this.showSimpleMessage()}
       </SafeAreaView>
     )
   }
@@ -356,14 +386,19 @@ errorStyle={{height: (props.touched.expireDate && props.errors.expireDate) ? 20 
 
 
 const mapStateToProps = (state: AppState) => ({
-  isCardSwiped : state.courseCheckout.isCardSwiped
+  isCardSwiped : state.courseCheckout.isCardSwiped,
+  loadingCard : state.cart.loadingCard,
+  errorMessage : state.cart.CardErrorMessage
+  
 })
 
 function bindToAction(dispatch: any) {
   return {
     
       cardSwiped : (swiped : boolean ) =>
-      dispatch(cardSwiped(swiped))
+      dispatch(cardSwiped(swiped)),
+      payWithCreditCard : (creditCardInfo:ICrediCartInfoRequestModel) =>
+      dispatch(payWithCreditCard(creditCardInfo)),
   };
 }
 
