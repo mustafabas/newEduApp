@@ -171,7 +171,9 @@ export function socialLogin(socialType : socialTypes,data?: LinkedInToken) {
       type: user.type
     }).then((res)=> {
       if(res.data.isSuccess) {
-
+        dispatch(reset())
+        AsyncStorage.multiSet([['userToken',res.data.result.token],['userId',res.data.result.userId.toString()]])
+        navigate('mainBottomTab')
       }
 
     })
@@ -198,6 +200,7 @@ export function loginFirstStep(email : string, password : string ) {
         .then(() => {
           dispatch(loginIsSucceed(true));
           dispatch(reset());
+          navigate('LoginPhoneVerify')
 
         })
         .catch(error => {

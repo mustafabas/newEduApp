@@ -12,6 +12,8 @@ export interface ICourseItem{
     IsCheckout : boolean;
     courseType : courseType;
     isAddedFromBase : boolean;
+    isOrdered : boolean;
+    price : number;
 }
 
 export interface ICourseBase {
@@ -22,6 +24,7 @@ export interface ICourseBase {
     priceDisplayName : string;
     courses :ICourseItem[];
     isCheckout : boolean;
+    isOrdered : boolean;
 
 
 }

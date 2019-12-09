@@ -3,5 +3,6 @@ export interface ICourseItemRequest{
     topicName :string;
     price : number;
     content:string;
-    priceDisplayName:string;
+    priceDisplayName:string;    
+    isOrdered : boolean;
 }

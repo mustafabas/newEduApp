@@ -7,7 +7,8 @@ import reducer from "./reducers";
 import signupred from './reducers/SignUpReducers'
 import loginRed from './reducers/LoginReducers'
 import HomeReducers from './reducers/HomeReducers';
-import cartReducers from './reducers/cartReducers'
+import cartReducers from './reducers/cartReducers';
+import courseCheckoutReducers from './reducers/courseCheckoutReducers'
 const persistConfig = {
   key: "root",
   storage: AsyncStorage
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   system: reducer,
   login: loginRed,
   signup: signupred,
-  cart : cartReducers
+  cart : cartReducers,
+  courseCheckout : courseCheckoutReducers,
 })
 
 

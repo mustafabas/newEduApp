@@ -27,6 +27,8 @@ import SignUpSecondPhoneVerificationScreen from '../screens/AppScreens/SignUp/Si
 import CartScreen from '../screens/AppScreens/Home/CartSCreen';
 import MyCourses from '../screens/AppScreens/Home/MyCourses';
 import LoginPhoneVerifyScreen from '../screens/AuthScreens/Login/LoginPhoneVerifyScreen'
+import AdressInformationScreen from '../screens/AppScreens/Basket/AdressInformationScreen'
+import CreditCartScreen from '../screens/AppScreens/Basket/CreditCartScreen'
 const MainStack = createStackNavigator(
   {
     Login: { screen: Login },
@@ -43,8 +45,12 @@ const MainStack = createStackNavigator(
 
 const myCourse = createStackNavigator({
   MyCourse : MyCourses
-})
 
+},{
+  navigationOptions : {
+    tabBarLabel : 'Kurslarim'
+  }
+})
 
 
 const EducationVideoStack = createStackNavigator({
@@ -54,7 +60,9 @@ const EducationVideoStack = createStackNavigator({
   Video: VideoScreen
 
 },{
-  // headerMode:'none'
+  navigationOptions : {
+    tabBarLabel : 'Ana Sayfa'
+  }
 })
 
 
@@ -62,7 +70,9 @@ const profileStack = createStackNavigator({
   UserInfo : {screen: UserInfoScreen}
 },
 {
-  // headerMode:'none'
+  navigationOptions : {
+    tabBarLabel : 'Profilim'
+  }
 })
 
 
@@ -83,7 +93,13 @@ EducationVideoStack.navigationOptions = ( navigation:any ) => {
 
 
 const cartStack =  createStackNavigator({
-  Cart : CartScreen
+  Cart : CartScreen,
+  Address :AdressInformationScreen,
+  CreditCart :CreditCartScreen
+},{
+  navigationOptions : {
+    tabBarLabel : 'Sepet'
+  }
 })
 
 
@@ -93,9 +109,10 @@ const cartStack =  createStackNavigator({
 
 const mainBottomTab = createBottomTabNavigator({
   Education : EducationVideoStack,
-  UserInfo : profileStack,
+  myCourse : myCourse,
+  
   cart : cartStack,
-  myCourse : myCourse
+  UserInfo : profileStack,
 },
 {
 
@@ -122,6 +139,8 @@ const mainBottomTab = createBottomTabNavigator({
       // You can return any component that you like here!
       return <Icon name={iconName} type="material-community" size={25} color={tintColor} />;
     },
+
+    
   }),
   tabBarOptions: {
     activeTintColor: '#d67676',
@@ -179,11 +198,12 @@ export default createAppContainer(
 
       MainStack : MainStack,
       mainBottomTab: mainBottomTab,
-      VideoScreen: VideoScreen
+      VideoScreen: VideoScreen,
+     
       
     },
     {
-      initialRouteName: "AuthStack",
+      initialRouteName: "AuthLoading",
 
     }
   )

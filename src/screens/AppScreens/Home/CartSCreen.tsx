@@ -72,10 +72,11 @@ class CartScreen extends Component<Props> {
         renderItem={({ item }) =>
         <View style={[styles.inputContainer,{padding:10,flexDirection:'row'}]}>
         <View style={{flex:0.9}}>
-        <Text style={{fontSize:20,fontWeight:'bold',fontFamily:'Roboto-Regular'}}>{item.id} </Text>
-        <HTML html={item.content} style={{ fontFamily: 'Roboto-Regular', marginTop: 10, fontSize: 16 }}></HTML>
+        <Text style={{fontSize:20,fontWeight:'bold',fontFamily:'Roboto-Regular'}}>{item.name} </Text>
+        
+        {item.content ? <HTML html={item.content} style={{ fontFamily: 'Roboto-Regular', marginTop: 10, fontSize: 16 }}></HTML> : <Text>{item.name}</Text>}
 
-        <Text style={{fontSize:15,fontFamily:'Roboto-Regular',fontWeight:'bold',marginTop:10}}>Fiyat: 50 TL</Text>
+        <Text style={{fontSize:15,fontFamily:'Roboto-Regular',fontWeight:'bold',marginTop:10}}>Fiyat: {item.displayPrice}</Text>
         </View>
         <TouchableOpacity onPress={()=> this.props.removeItemFromCart(item.id.toString(), this.props.courses)} style={{flex:0.1}}>
         <Icon name="close" size={30} type="material-community" color="#d67676"/>
@@ -133,9 +134,9 @@ class CartScreen extends Component<Props> {
         </ScrollView>
         
        <View style={{width:'100%',padding:10,flexDirection:'row',justifyContent:'space-between',backgroundColor:'#ffe3e3'}}>
-           <Text style={{fontFamily:'Roboto-Regular',fontSize:20,fontWeight:'bold',marginTop:5}}>TOPLAM : {this.props.courses.reduce((prev,next) => prev + parseInt(next.displayPrice),0)}</Text>
+           <Text style={{fontFamily:'Roboto-Regular',fontSize:20,fontWeight:'bold',marginTop:5}}>TOPLAM : {this.props.courses.reduce((prev,next) => prev + parseInt(next.price),0)} ₺</Text>
            
-           <Button disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
+           <Button onPress={()=> this.props.navigation.navigate('Address')} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
                     
        </View>
       </SafeAreaView>

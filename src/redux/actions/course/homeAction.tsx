@@ -101,7 +101,8 @@ export function CourseHomeListData(){
 
             let products  =  await AsyncStorage.getItem('products')
             let courseBase = {} as ICourseBase;
-
+            let userID  =  await AsyncStorage.getItem('userID')
+            console.log(userID)
             console.log("products" + products)
             let newProduct : localType[] =[];
             if (products){
@@ -109,12 +110,14 @@ export function CourseHomeListData(){
 
                 console.log(newProduct)
             }
-              axios.get(EDU_API_COURSES+"?id=1"
+              axios.get(EDU_API_COURSES+`?id=1&userId=${userID ? userID : 0}`
                 )
   .then(async (response) =>{
       if(response.data.isSuccess){
+        
         let data = response.data.result!;
-     
+        console.log("data")
+        console.log(data)
         let courseItems : ICourseItem[] =[];
 
 
@@ -124,7 +127,7 @@ export function CourseHomeListData(){
         courseBase.priceDisplayName = data.priceDisplayName
         courseBase.price = data.price
         courseBase.isCheckout = newProduct.some((course:localType) => course.id === data.courseId.toString())
-
+        courseBase.isOrdered = data.isOrdered
        await response.data.result!.courseTopicItems.forEach( async (element:ICourseItemRequest) => {
            console.log(newProduct)
             courseItems!.push(
@@ -135,7 +138,8 @@ export function CourseHomeListData(){
                     displayPrice:element.priceDisplayName,
                     IsCheckout : newProduct.some((course:localType) => course.id === element.courseTopicId.toString()) || courseBase.isCheckout,
                     courseType : courseType.COURSE_ONE,
-                    isAddedFromBase : courseBase.isCheckout
+                    isAddedFromBase : courseBase.isCheckout,
+                    isOrdered : element.isOrdered
                     
                 }
             ));
