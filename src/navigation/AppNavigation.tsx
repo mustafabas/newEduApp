@@ -29,6 +29,13 @@ import MyCourses from '../screens/AppScreens/Home/MyCourses';
 import LoginPhoneVerifyScreen from '../screens/AuthScreens/Login/LoginPhoneVerifyScreen'
 import AdressInformationScreen from '../screens/AppScreens/Basket/AdressInformationScreen'
 import CreditCartScreen from '../screens/AppScreens/Basket/CreditCartScreen'
+import CheckoutTypeScreen from '../screens/AppScreens/Basket/CheckoutTypeScreen'
+import checkoutWebScreen from '../screens/AppScreens/Basket/checkoutWebScreen'
+import MoneyOrderScreen from '../screens/AppScreens/Basket/MoneyOrderScreen';
+import ProfileEditScreen from '../screens/AppScreens/User/ProfileEditScreen'
+import NotificationScreen from "../screens/AppScreens/User/NotificationScreen";
+import SettingsScreen from '../screens/AppScreens/User/SettingsScreen';
+import HelpSupportScreen from '../screens/AppScreens/User/HelpSupportScreen'
 const MainStack = createStackNavigator(
   {
     Login: { screen: Login },
@@ -44,7 +51,8 @@ const MainStack = createStackNavigator(
 );
 
 const myCourse = createStackNavigator({
-  MyCourse : MyCourses
+  MyCourse : MyCourses,
+  CourseDetail: { screen :CourseDetail },
 
 },{
   navigationOptions : {
@@ -67,7 +75,11 @@ const EducationVideoStack = createStackNavigator({
 
 
 const profileStack = createStackNavigator({
-  UserInfo : {screen: UserInfoScreen}
+  UserInfo : {screen: UserInfoScreen},
+  ProfileEdit: ProfileEditScreen,
+  Notification: NotificationScreen,
+  Settings : SettingsScreen,
+  HelpSupport :HelpSupportScreen
 },
 {
   navigationOptions : {
@@ -95,7 +107,10 @@ EducationVideoStack.navigationOptions = ( navigation:any ) => {
 const cartStack =  createStackNavigator({
   Cart : CartScreen,
   Address :AdressInformationScreen,
-  CreditCart :CreditCartScreen
+  CreditCart :CreditCartScreen,
+  CheckoutType :CheckoutTypeScreen,
+  checkoutWeb : checkoutWebScreen,
+  MoneyOrder : MoneyOrderScreen
 },{
   navigationOptions : {
     tabBarLabel : 'Sepet'

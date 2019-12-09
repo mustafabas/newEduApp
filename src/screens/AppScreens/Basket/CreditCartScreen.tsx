@@ -27,6 +27,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { Formik } from 'formik';
 
+import { WebView } from 'react-native-webview';
+
 
 
 export interface Props {
@@ -232,9 +234,15 @@ render(){
 
 
         <SafeAreaView style={{padding:10}}>
+<KeyboardAvoidingView
 
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+
+                >
+                  <ScrollView bounces={false}>
 
 <Formik
+              style={{flex:1}}
               initialValues={{ name: "",cardNumber: "",cvv:"",expireDate:""}}
               // validationSchema={loginSchema}
               onSubmit={values => this.handleLogin()}
@@ -243,7 +251,7 @@ render(){
                 console.log(props, "fdsfsdfdsf");
                 return (
              
-             <View >
+             <View>
                  {this._renderCard(imageOpacity,spin,props,spin2,imageOpacity2)}
             <Input
                         
@@ -281,14 +289,14 @@ render(){
                         // error={props.touched.email && props.errors.email}
                         // errorStyle={{borderBottomColor: (props.touched.email && props.errors.email) ? colors.accent : colors.borderColor}}
                       />  
-
+<View style={{flexDirection:'row',justifyContent:'space-between'}}>
 <Input
 
 // inputContainerStyle={{borderWidth:1,borderRadius:5,borderColor:'#a31515',paddingLeft:10}}
 placeholder="cvv"
 maxLength={3}
 keyboardType="number-pad"
-containerStyle={{marginBottom:5}}
+containerStyle={{marginBottom:5,flex:.4}}
 inputStyle={{fontSize:15,color:'#4f4f4f',fontFamily:'OpenSans-Regular'}}
 value={props.values.cvv}
 onChangeText={props.handleChange("cvv")}
@@ -309,7 +317,7 @@ errorStyle={{height: (props.touched.cvv && props.errors.cvv) ? 20 : 0,color:'#a3
 placeholder="Expire Date"
 maxLength={4}
 keyboardType="number-pad"
-containerStyle={{marginBottom:5}}
+containerStyle={{marginBottom:5,flex:.4}}
 inputStyle={{fontSize:15,color:'#4f4f4f',fontFamily:'OpenSans-Regular'}}
 value={props.values.expireDate}
 onChangeText={props.handleChange("expireDate")}
@@ -324,14 +332,19 @@ errorStyle={{height: (props.touched.expireDate && props.errors.expireDate) ? 20 
 // error={props.touched.email && props.errors.email}
 // errorStyle={{borderBottomColor: (props.touched.email && props.errors.email) ? colors.accent : colors.borderColor}}
 />  
+</View>
 
+  <Button
+  onPress={()=> this.props.navigation.navigate('checkoutWeb')}
+   
+   text="Odeme Yap" IsDisabled={!(props.values.cardNumber.length==16 && props.values.cvv.length==3 && props.values.expireDate.length==4 && props.values.name.length>5)} />
 
                     </View>
                 );
               }}
             </Formik>
-              
-            
+            </ScrollView>
+            </KeyboardAvoidingView>
       </SafeAreaView>
     )
   }

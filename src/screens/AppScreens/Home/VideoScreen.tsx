@@ -50,6 +50,10 @@ class VideoScreen extends Component<Props,{}> {
       playerState,
     });
   };
+
+  componentDidMount() {
+    console.log(this.props.navigation.getParam('videoLink'))
+  }
  
   onReplay = () => {
     //Handler for Replay
@@ -107,7 +111,7 @@ class VideoScreen extends Component<Props,{}> {
           ref={videoPlayer => (this.videoPlayer = videoPlayer)}
           resizeMode={this.state.screenType}
           onFullScreen={this.state.isFullScreen}
-          source={{ uri: 'https://dl.dropbox.com/s/9zs9mbu5zm6ypx5/grafik.mp4?dl=0' }}
+          source={{ uri: this.props.navigation.getParam('videoLink')}}
           style={styles.mediaPlayer}
           volume={10}
         />

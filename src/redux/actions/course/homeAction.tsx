@@ -1,12 +1,13 @@
 
 import { AsyncStorage } from "react-native";
 import axios from 'axios'
-import { EDU_API_LOGIN, EDU_API_COURSES } from '../../../constants'
+import { EDU_API_LOGIN, EDU_API_COURSES,EDU_API_GET_COURSE_INFO, EDU_API_GET_ORDERED_COURSES } from '../../../constants'
 import { Dispatch } from "react";
-import { HOME_LOADING, HOME_GET_COURSE,COURSE_ITEM_LOADING } from './../types'
+import { HOME_LOADING, HOME_GET_COURSE,COURSE_ITEM_LOADING,COURSE_VIDEO_DETAIL_INFO, COURSE_IS_ADDED, RESET_MESSAGE } from './../types'
 import { Action } from "redux";
-import { ICourseItem,ICourseBase } from "../../../models/course/coruseItem";
+import { ICourseItem,ICourseBase, ICourseVideoSection, IVideoModel } from "../../../models/course/coruseItem";
 import { ICourseItemRequest } from "../../../models/course/courseItemRequest";
+import { navigate } from "../../services/Navigator";
 
 
 
@@ -16,8 +17,8 @@ export interface localType  {
 }
 
 export enum courseType  {
-    COURSE_ALL= 'courseBase',
-    COURSE_ONE= 'courseOne',
+    COURSE_ALL= 1,
+    COURSE_ONE= 2,
 }
 
 export function addToCartOrRemove(courseTypeTmp:courseType,id : string , courseBase : ICourseBase) {
@@ -82,12 +83,87 @@ export function addToCartOrRemove(courseTypeTmp:courseType,id : string , courseB
  } )
  dispatch(loading(true));
  dispatch(homeDatas(courseBase));
-
+ dispatch(showMessage(isAdded))
+ dispatch(resetMessage())
  dispatch(loading(false));
 //  AsyncStorage.removeItem('products')
  }
 
       
+}
+
+
+
+
+
+// export function getCoursesOrdered() {
+//    return  (dispatch : Dispatch<Action>) => {
+//     let coursesList : ICourseItem[];
+//         AsyncStorage.multiGet(['userId','userToken']).then((res)=> {
+//             let userId = res[0][1];
+//             let token = res[1][1];
+
+//             const headers = {
+//                 'Content-Type': 'application/json',
+//                 'Authorization': `Bearer ${token}`
+//               }
+//               console.log(userId)
+//               console.log(token)
+//             if(userId) {
+//                 axios.get(EDU_API_GET_ORDERED_COURSES+`?userId=${userId}`,{ headers: headers })
+//                 .then((res) => {
+//                     if(res.data.isSuccess) {
+//                         console.log(res.data.result)
+//                     }
+//                 }).catch(err => {
+//                     console.log(err)
+//                 })
+//             }
+//         });
+
+   
+
+//    }
+// }
+
+
+
+export function getCourseDetail(id : string,isCheckouted : boolean) {
+
+    return (dispatch : Dispatch<Action>) => {
+        
+        axios.get(EDU_API_GET_COURSE_INFO+'?topicId='+id).then((res) => {
+            if(res.data.isSuccess) {
+                var courseVideoSection = {} as ICourseVideoSection;
+                var data = res.data.result
+                courseVideoSection.topicName = data.topicName;
+                courseVideoSection.content= data.content;
+                courseVideoSection.price = data.price;
+                courseVideoSection.displayPriceName = data.displayPriceName;
+                courseVideoSection.buyedPersonsCount = data.buyedPersonsCount;
+                var videoItems = [];
+                
+                     data.videoItemModels.forEach(element => {
+
+                        videoItems.push(
+                        ({
+                        videoId : element.videoId,
+                        videoName : element.videoName,
+                        videoUrl : element.videoUrl,
+                        isFree : element.isFree,   
+                        }
+                    ));
+                    courseVideoSection.videoItemModels = videoItems;
+
+
+                });
+
+                dispatch(sendCourseDetailInfo(courseVideoSection))
+                navigate('CourseDetail',{headerTitle : courseVideoSection.topicName,
+                isCheckouted : isCheckouted})
+            }
+        })  
+      }
 }
 
 
@@ -101,7 +177,7 @@ export function CourseHomeListData(){
 
             let products  =  await AsyncStorage.getItem('products')
             let courseBase = {} as ICourseBase;
-            let userID  =  await AsyncStorage.getItem('userID')
+            let userID  =  await AsyncStorage.getItem('userId')
             console.log(userID)
             console.log("products" + products)
             let newProduct : localType[] =[];
@@ -150,7 +226,7 @@ export function CourseHomeListData(){
         console.log(courseBase);
         dispatch(loading(false));
         dispatch(homeDatas(courseBase));
-       
+
       }  
   }).catch((err) => {
     loading(false);
@@ -184,4 +260,19 @@ export const homeDatas = (response:ICourseBase) => ({
 export const itemLoading =(loading : boolean) => ({
     type: COURSE_ITEM_LOADING,
     payload: loading
+})
+
+export const sendCourseDetailInfo = (courseVideoDetail : ICourseVideoSection) => ({
+    type : COURSE_VIDEO_DETAIL_INFO,
+    payload : courseVideoDetail
+})
+
+
+export const showMessage = (isAdded : boolean)  => ({
+    type : COURSE_IS_ADDED,
+    payload : isAdded
+})
+
+export const resetMessage = () => ({
+    type : RESET_MESSAGE
 })

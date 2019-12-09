@@ -132,7 +132,7 @@ renderLinkedin(){
 
 
     return (
-      <View style={styles.container}>
+      <View style={[styles.container,{backgroundColor:'#b80000'}]}>
         {/* <LinearGradient style={{flex:1}} colors={['#ff4259', '#db5c6b', '#ffb5be']} > */}
        
         <KeyboardAvoidingView

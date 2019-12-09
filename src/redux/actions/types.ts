@@ -26,8 +26,10 @@ export const HOME_LOADING = "home_Loading";
 export const HOME_GET_COURSE ="homeGetVideos";
 
 export const COURSE_ITEM_LOADING = "COURSE_ITEM_LOADING";
-
+export const COURSE_VIDEO_DETAIL_INFO = "courseVideoDetailInfo"
 export const RESET_PROPS = "resetProps";
+export const COURSE_IS_ADDED = "courseIsAdded";
+export const RESET_MESSAGE = "resetMessage";
 
 
 

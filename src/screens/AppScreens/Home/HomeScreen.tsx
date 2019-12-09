@@ -19,7 +19,7 @@ import stylesNew from "../../AuthScreens/Login/styles";
 import DeviceInfo from 'react-native-device-info';
 import { NavigationScreenProps, NavigationScreenProp, NavigationScreenComponent, NavigationStackScreenOptions ,NavigationEvents} from 'react-navigation'
 import { Header } from 'react-native-elements';
-import { CourseHomeListData ,addToCartOrRemove,courseType} from '../../../redux/actions/course/homeAction';
+import { CourseHomeListData ,addToCartOrRemove,courseType,getCourseDetail} from '../../../redux/actions/course/homeAction';
 import { ICourseItem,ICourseBase } from '../../../models/course/coruseItem';
 import { AppState } from '../../../redux/store'
 import HTML from 'react-native-render-html';
@@ -32,6 +32,7 @@ import {
 
 
 import { string } from 'yup';
+import { showMessage } from 'react-native-flash-message';
 
 interface NavStateParams {
   someValue: string
@@ -40,11 +41,16 @@ interface NavStateParams {
   navigationScreen: NavigationScreenComponent<{}>;
   navigation: NavigationScreenProp<any, any>;
   courseBase : ICourseBase;
-
+  addedToChart : boolean;
+  removedFromChart : boolean;
   CourseHomeListData : () => void;
   loading: boolean;
   addToCartOrRemove : (courseType : courseType,id : string, courseBase : ICourseBase) => void;
+  getCourseDetail : (id : string,isCheckouted : boolean ) => void;
+
   itemLoading : boolean;
+
+
 };
 
 
@@ -81,6 +87,22 @@ class App extends Component<Props, {}> {
       position: 0
     };
   }
+
+
+  showSimpleMessage() {
+
+    if (this.props.addedToChart || this.props.removedFromChart) {
+
+      showMessage({
+        message: `Basariyle sepet${this.props.addedToChart ? 'e eklendi' : ''}${this.props.removedFromChart ? 'ten silindi' : ''}`,
+        type: "success",
+        icon: 'auto'
+      }
+      );
+    }
+  
+  }
+
 
 
   
@@ -199,7 +221,7 @@ renderScrollViewContent() {
           <FlatList
           // contentContainerStyle`={{margin:10}}
           numColumns={1}
-          style={{ marginTop: Platform.OS == "ios" ? 0  : 300}}
+          style={{ marginTop: Platform.OS == "ios" ? -20  : 300}}
           // style={{flexGrow:0}}
           data={this.props.courseBase.courses}
           keyExtractor={item => item.id.toString()}
@@ -216,7 +238,7 @@ renderScrollViewContent() {
               }}>
               <Text style={{ fontFamily: 'Roboto-Regular', fontSize: 20, fontWeight: '700', paddingBottom: 10 }}>{item.name}</Text>
               <View style={{ width: '100%', height: 1, backgroundColor: '#d67676' }}></View>
-              <HTML html={item.content} style={{ fontFamily: 'Roboto-Regular', marginTop: 10, textAlign: 'center', paddingBottom: 10, fontSize: 16 }}></HTML>
+              <HTML html={item.content.replace("Açıklama:","")} style={{ fontFamily: 'Roboto-Regular', marginTop: 10, textAlign: 'center', paddingBottom: 10, fontSize: 16 }}></HTML>
 
               <View style={{ flexDirection: 'row', marginTop: 10 }}>
 
@@ -224,9 +246,7 @@ renderScrollViewContent() {
    
                <View style={{flex:0.5, flexDirection:'row', justifyContent:'flex-end'}}>
                 <Text style={{fontSize:15, fontWeight:'700', flex:0.6,marginTop:7}}>{item.displayPrice}</Text>
-                <TouchableOpacity style={{alignContent:'flex-end', justifyContent:'flex-end',marginTop:-30 }} onPress={()=>this.props.navigation.navigate("CourseDetail",{
-          courseItem:item 
-        })} >
+                <TouchableOpacity style={{alignContent:'flex-end', justifyContent:'flex-end',marginTop:-30 }} onPress={()=>this.props.getCourseDetail(item.id.toString(),false)} >
                   <Icon name="eye" color='#db5c6b' style={{ marginTop: 4, flex:0.2 }} size={25} />
 
                 </TouchableOpacity>
@@ -299,7 +319,7 @@ renderScrollViewContent() {
 
     return (
       <SafeAreaView  style={
-        styles.fill}>
+        stylesNew.container}>
           
 
         {/* <View style={{backgroundColor: '#772ea2'}}>
@@ -371,6 +391,9 @@ renderScrollViewContent() {
           />
           {/* <Text style={styles.title}>Title</Text> */}
         </Animated.View>
+
+
+        {this.showSimpleMessage()}
       </SafeAreaView>
     );
   }
@@ -438,7 +461,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: AppState) => ({
   loading: state.home.loading,
-  courseBase: state.home.courseBase
+  courseBase: state.home.courseBase,
+  addedToChart : state.home.addedToChart,
+  removedFromChart: state.home.removedFromChart
 })
 
 function bindToAction(dispatch: any) {
@@ -446,7 +471,9 @@ function bindToAction(dispatch: any) {
     CourseHomeListData: () =>
       dispatch(CourseHomeListData()),
       addToCartOrRemove: (courseType : courseType,id : string, courseBase : ICourseBase) => 
-      dispatch(addToCartOrRemove(courseType,id, courseBase))
+      dispatch(addToCartOrRemove(courseType,id, courseBase)),
+      getCourseDetail : (id : string,isCheckouted : boolean) => 
+      dispatch(getCourseDetail(id,isCheckouted))
   };
 }
 

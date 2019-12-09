@@ -6,13 +6,13 @@ import {
   StyleSheet,
   Text,
   View,
-  RefreshControl,ViewProps,Dimensions, TouchableHighlight
+  RefreshControl,FlatList,ViewProps,Dimensions, TouchableHighlight,ScrollView,Button
 } from 'react-native';
 
 import {
   SafeAreaView
 } from 'react-navigation'
-import { Input, Button, FloatingLabelInput,LessonSection } from "../../../components";
+import { Input, FloatingLabelInput,LessonSection } from "../../../components";
 import stylesNew from "../../AuthScreens/Login/styles";
 import DeviceInfo from 'react-native-device-info';
 import {NavigationScreenProps,NavigationScreenProp,NavigationScreenComponent,NavigationStackScreenOptions} from 'react-navigation'
@@ -20,12 +20,16 @@ import { Header } from 'react-native-elements';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Icon } from 'react-native-elements'
+import { ICourseItem, ICourseVideoSection } from '../../../models/course/coruseItem';
+import { AppState } from '../../../redux/store';
+import { connect } from 'react-redux';
+import HTML from 'react-native-render-html';
 interface NavStateParams {
   someValue: string;
 }
 
-export interface HomeScreenProps {
-  navigationScreen:  NavigationScreenComponent<{}>;
+export interface Props {
+  CourseVideoSection : ICourseVideoSection;
   navigation :  NavigationScreenProp<any,any>;
 };
 
@@ -60,42 +64,54 @@ var hasNotchTmp = false
   
 //     })
 
-export default class CourseDetail extends Component<HomeScreenProps,{}> {
-
-  constructor(props : any) {
-    super(props);
-
-    this.state = {
-      scrollY: new Animated.Value(
-        // iOS has negative initial scroll value because content inset...
-        Platform.OS === 'ios' ? -HEADER_MAX_HEIGHT : 0,
-      ),
-      refreshing: false,
-      position : 0
-    };
+class CourseDetail extends Component<Props> {
 
 
 
+
+
+  static navigationOptions = ({navigation}) => ({
+    title: navigation.getParam('headerTitle'),
+    headerStyle: {
+      backgroundColor: '#d67676',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+})
+
+
+
+
+
+  _renderVideoButton(isShow : boolean,videoLink : string){
+    var isCheckout  = this.props.navigation.getParam('isCheckouted')
+    console.log(isShow)
+    if(isShow || isCheckout) {
+      return (
+        <TouchableOpacity onPress={()=> this.props.navigation.navigate('Video',{videoLink : videoLink})} style={{flex:.05}}>
+        <Icon name="arrow-right" type="material-community" size={25}  color={"#d67676"} />
+        
+        </TouchableOpacity>
+      )
+    }
+    else {
+      return (
+        <View style={{flex:.05}}>
+
+        </View>
+      )
+    }
   }
-
   _renderScrollViewContent() {
 
   }
 
-  static navigationOptions = (
-    screenProps: NavigationScreenProps
-  ) => {
-    return { 
-
-      headerStyle : {
-          // height : screenProps.navigation.getParam('headerHeight'),
-          // backgroundColor:'#d67676'
-      },
-        header: null 
-    }
-  }  
+  
 
   componentDidMount(){
+
 
   }
 
@@ -109,10 +125,17 @@ export default class CourseDetail extends Component<HomeScreenProps,{}> {
   
   }
 
-  renderCustomHeaderText(){
-    var courseItem = this.props.navigation.getParam('courseItem');
+  renderHeaderLeft(){
     return (
-<Text style={{color:'#fff'}}>{courseItem.name}</Text>
+      <TouchableOpacity onPress={()=> this.props.navigation.goBack()}>
+        <Icon name="arrow-left" type="material-community" color={"white"} />
+      </TouchableOpacity>
+    )
+  }
+  renderCustomHeaderText(){
+   
+    return (
+<Text style={{color:'#fff'}}>{this.props.CourseVideoSection.topicName}</Text>
 
     );
   }
@@ -134,52 +157,14 @@ export default class CourseDetail extends Component<HomeScreenProps,{}> {
 
 
   render() {
-    var courseItem = this.props.navigation.getParam('courseItem');
+
     // Because of content inset the scroll value will be negative on iOS so bring
     // it back to 0.
 
-    const scrollY = Animated.add(
-      this.state.scrollY,
-      Platform.OS === 'ios' ? HEADER_MAX_HEIGHT : 0,
-    );
-    const headerTranslate = scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, -HEADER_SCROLL_DISTANCE -(Platform.OS=="ios" ? 0 : 38)],
-      extrapolate: 'clamp',
-    });
-
-    const imageOpacity = scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-      outputRange: [1, 1, 0],
-      extrapolate: 'clamp',
-    });
-    const textOpacity = scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, 0, 1],
-      extrapolate: 'clamp',
-    });
-    const imageTranslate = scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE],
-      outputRange: [0, 200],
-      extrapolate: 'clamp',
-    });
-
-    const titleScale = scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-      outputRange: [1, 1, 1],
-      extrapolate: 'clamp',
-    });
-    const titleTranslate = scrollY.interpolate({
-      inputRange: [0, HEADER_SCROLL_DISTANCE / 2, HEADER_SCROLL_DISTANCE],
-      outputRange: [hasNotchTmp ? 0 : 0, 0, hasNotchTmp ?  20 :  5],
-      extrapolate: 'clamp',
-    });
-
-    
 
     return (
       <SafeAreaView  style={
-        styles.fill}>
+        [stylesNew.container,{paddingTop:30}]}>
 
         {/* <View style={{backgroundColor: '#772ea2'}}>
         {/* <MyStatusBar backgroundColor="black" barStyle="light-content" /> */}
@@ -187,38 +172,18 @@ export default class CourseDetail extends Component<HomeScreenProps,{}> {
   <StatusBar barStyle="light-content" backgroundColor="#d67676" />
 
 
-        <Animated.ScrollView
+        <ScrollView
           style={styles.fill}
-          scrollEventThrottle={1}
-          onScroll={Animated.event(
-            [{ nativeEvent: { contentOffset: { y: this.state.scrollY } } }],
-            { useNativeDriver: true },
-          )}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={() => {
-                this.setState({ refreshing: true });
-                setTimeout(() => this.setState({ refreshing: false }), 1000);
-              }}
-              // Android offset for RefreshControl
-              progressViewOffset={HEADER_MAX_HEIGHT}
-            />
-          }
-          // iOS offset for RefreshControl
-          contentInset={{
-            top: HEADER_MAX_HEIGHT,
-          }}
-          contentOffset={{
-            y: -HEADER_MAX_HEIGHT,
-          }}
-        >
+
+          
+          >
           
         
 
           <View style={{  justifyContent: "center",
     padding: 20,
     margin:10,
+    
     shadowColor: '#969696',backgroundColor: 'white',
     marginTop: Platform.OS=="ios" ? 0 : 300,
     shadowOffset: {width: 3, height: 3 },
@@ -226,54 +191,42 @@ export default class CourseDetail extends Component<HomeScreenProps,{}> {
     borderRadius: 5,
     elevation:3}}>
       
-              <Text style={{fontSize:20}}>What will i learn</Text>
-              <Text style={{fontSize:12,color:'#919191',marginTop:5}}>
-    {courseItem.content}</Text>
+              <Text style={{fontSize:20}}>{this.props.CourseVideoSection.topicName}</Text>
+             
+    <HTML html={this.props.CourseVideoSection.content.replace("Açıklama:","")} style={{ fontFamily: 'Roboto-Regular', marginTop: 10, textAlign: 'center', paddingBottom: 10, fontSize: 16 }}></HTML>
+         <View style={{flexDirection:'row'}}>
+         <Icon name="account-tie" type="material-community" size={25} color="#d67676" ></Icon>
+         <Text  style={{fontFamily:'Roboto-Bold',fontSize:18,marginTop:2.5,marginLeft:10,color:'#d67676'}}>{this.props.CourseVideoSection.buyedPersonsCount}</Text>
+          </View> 
           </View>
 
           <Text style={[stylesNew.headText,{marginLeft:30}]}>Dersler</Text>
-          <LessonSection onPress={()=>this.props.navigation.navigate('Video')} ></LessonSection>
-          <LessonSection></LessonSection>
-          <LessonSection></LessonSection>
-          <LessonSection></LessonSection>
+          {/* <LessonSection onPress={()=>this.props.navigation.navigate('Video')} ></LessonSection> */}
+          <FlatList
+        // contentContainerStyle={{margin:10}}
+        data={this.props.CourseVideoSection.videoItemModels}
+        style={{margin:10,borderRadius:10}}
+        ItemSeparatorComponent={(item) => <View style={{height:.5,backgroundColor:'#e3e3e3'}}></View>}
+          // style={{flexGrow:0}}
+        // keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) =>
+        <View style={{padding:10,marginBottom:0,flexDirection:'row',backgroundColor:'white',flex:1}}>
+        <Text style={{fontFamily:'Roboto-Bold',fontSize:18,flex:0.1}}>{this.props.CourseVideoSection.videoItemModels.indexOf(item)+1}</Text>
+        
+        <Text style={{fontFamily:'Roboto-Regular',fontSize:18,flex:0.85,paddingRight:0}}>{item.videoName}</Text>
+          {this._renderVideoButton(item.isFree,item.videoUrl)}
+        </View>
+       
 
-        </Animated.ScrollView>
-        <Animated.View
-          pointerEvents="none"
-          style={[
-            styles.header,
-            { transform: [{ translateY: headerTranslate }] },
-          ]}
-        >
-          <Animated.Image
-            style={[
-              styles.backgroundImage,
-              {
-                opacity: imageOpacity,
-                transform: [{ translateY: imageTranslate }],
-              },
-            ]}
-            source={require('../../../assets/edu-1.jpg')}
-          />
-        </Animated.View>
-        <Animated.View
-          style={[
-            styles.bar,
-            {
-              transform: [
-                { scale: titleScale },
-                { translateY: titleTranslate },
-              ]
-            },
-          ]}
-        >
-          <Header backgroundColor="#d67676"
-  leftComponent={this.renderCustomLeftButton()}
-  centerComponent={this.renderCustomHeaderText()}
-  rightComponent={{ icon: 'home', color: '#fff' }}
-/>
+        }
+
+      />
+
+        
+       
+       
           {/* <Text style={styles.title}>Title</Text> */}
-        </Animated.View>
+</ScrollView>
       </SafeAreaView>
     );
   }
@@ -337,3 +290,21 @@ const styles = StyleSheet.create({
     backgroundColor : 'red'
   },
 });
+
+
+
+
+
+
+const mapStateToProps = (state: AppState) => ({
+  CourseVideoSection : state.home.CourseVideoSection
+  
+})
+
+function bindToAction(dispatch: any) {
+  return {
+  };
+}
+
+
+export default connect(mapStateToProps)(CourseDetail);
