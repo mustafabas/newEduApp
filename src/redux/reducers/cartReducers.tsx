@@ -1,4 +1,4 @@
-import { CART_GET_COURSE,CART_LOADING } from "../actions/types";
+import { CART_GET_COURSE,CART_LOADING, CreditCard_LOADING, CreditCard_Message } from "../actions/types";
 import { Action } from "../../models/action";
 import { cartState } from "../../models/state";
 import { ICourseAmount, ICourseItem } from "../../models/course/coruseItem";
@@ -10,9 +10,8 @@ const intialState = {
   courses : {} as ICourseItem[],
   loading: false,
   courseAmount : {} as ICourseAmount,
-  
-
-  
+  loadingCard: false,
+  CardErrorMessage:""
 };
 
 export default (state: cartState = intialState, action: Action) => {
@@ -26,7 +25,16 @@ export default (state: cartState = intialState, action: Action) => {
         ...state,
         loading : action.payload
       }
-    
+    case CreditCard_LOADING:
+    return{
+      ...state,
+      loadingCard:action.payload
+    }
+    case CreditCard_Message:
+        return{
+          ...state,
+          CardErrorMessage:action.payload
+        }
     default:
       return {
         ...state

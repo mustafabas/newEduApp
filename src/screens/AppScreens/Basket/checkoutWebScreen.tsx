@@ -26,20 +26,15 @@ import { AppState } from '../../../redux/store';
 import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import { Formik } from 'formik';
-
+import HTML from 'react-native-render-html';
 import { WebView } from 'react-native-webview';
+import { ICrediCartInfoRequestModel } from '../../../models/course/coruseItem';
 
 
 
 export interface Props {
   navigation: NavigationScreenProp<any, any>;
-
-
 };
-
-
-
-
 
 class checkoutWebScreen extends Component<Props, {}> {
     static navigationOptions = {
@@ -57,35 +52,21 @@ class checkoutWebScreen extends Component<Props, {}> {
       
      
       componentDidMount() { 
-        var url = "https://www.ikonegitim.com/KrediKarti.aspx?code=317771&kullanici=10092"
+        var creditCardInfo = this.props.navigation.getParam("creditCardInfo") as ICrediCartInfoRequestModel;
+ 
+
+        var url = "http://api.ikonakademi.com/Payment?BasketId="+creditCardInfo.basketId+"&CardNameSurname="+creditCardInfo.nameSurname+"&CreditCardNumber="+creditCardInfo.creditCardNumber+"&Month="+creditCardInfo.month+"&Year="+creditCardInfo.year+"&Cvv2="+creditCardInfo.cvv2;
         Linking.openURL(url).catch((err) => console.error('An error occurred', err));
       }
 render(){
    var checkoutFormContent = this.props.navigation.getParam('checkoutFormContent')
-
-   const html = `
-      <html>
-      <head></head>
-      <body>
-      <h1>My First JavaScript</h1>
-      <button type="button"
-onclick="document.getElementById('demo').innerHTML = Date()">
-Click me to display Date and Time.</button>
-<script>
-document.getElementById("demo").innerHTML = "Hello JavaScript!";
-</script> 
-          </body>
-      </html>
-    `;
-
-
 
     // const spin = this.spinValue.interpolate({
     //     inputRange: [0, 1],
     //     outputRange: ['0deg', '360deg']
     //   })
     return(
-<View>
+<View >
 
 </View>
 

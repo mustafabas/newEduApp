@@ -45,7 +45,8 @@ export const ADDRESS_GET_NEIGHBOOR = 'addressGetNeighboor';
 export const SWIPE_CARD = "swipeCard"
 
 export const ADRESS_LOADING = "addressLoading"
-
+export const CreditCard_LOADING = "CreditCardLoading"
+export const CreditCard_Message = "CreditCardMessage";
 export const ERROR_CODE = "errorCode";
 
 export const COUNT_DOWN = "countDown"

@@ -22,5 +22,7 @@ export interface cartState {
   courses: ICourseItem[];
   loading: boolean;
   courseAmount : ICourseAmount;
+  loadingCard: boolan;
+  CardErrorMessage:string;
 
 }
