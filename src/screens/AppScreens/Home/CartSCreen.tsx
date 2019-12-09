@@ -11,20 +11,29 @@ import Icon from "react-native-vector-icons/SimpleLineIcons";
 import { ScrollView } from "react-native-gesture-handler";
 import { AppState } from "../../../redux/store";
 import { getCart } from '../../../redux/actions/course/cartAction'
-import { ICourseBase } from "../../../models/course/coruseItem";
+import { ICourseBase, ICourseItem, ICourseAmount, IBasket } from "../../../models/course/coruseItem";
 import {courseType } from '../../../redux/actions/course/homeAction'
 import { removeItemFromCart} from '../../../redux/actions/course/cartAction'
 import HTML from 'react-native-render-html';
+import FlashMessage,{ showMessage, hideMessage, } from "react-native-flash-message";
+
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
   getCart : () => void;
   courseBase : ICourseBase;
   loading :boolean;
   removeItemFromCart : (courseType: courseType ,id : string, courseBase : ICourseBase[]) => void;
+  courses : ICourseItem[];
+  courseAmount : ICourseAmount;
 }
 
 
 class CartScreen extends Component<Props> {
+
+  
+
+  
+
 
     constructor(props : any) {
         super(props);
@@ -34,18 +43,78 @@ class CartScreen extends Component<Props> {
           refreshing: false,
 
         };
-    
-    
-    
+
       }
   
+      renderDiscountContainer(){
+        if(this.props.courses.length<3) {
+          if(this.props.courses.length == 1 && this.props.courses[0].courseType === courseType.COURSE_ALL){
 
-  componentDidMount() {
-    this.props.getCart();
+          }
+          else {
+            return(
+              <View style={[styles.inputContainer,{padding:10,flexDirection:'row',backgroundColor:'#c3d9c6'}]}>
+  
+          <Text style={{fontSize:15,fontWeight:'300',fontFamily:'Roboto-Regular'}}>3 veya daha fazla urun eklerseniz sepette %10 indirim kazanirsiniz </Text>
+          
+      </View>
+            )
+          }
+          
+        }
+      }
+      getCourses(){
+        let courses ="";
+        var basket = {}  as IBasket;
+        this.props.courses.forEach((element) => {
+          basket.courseType = element.courseType
+          courses = courses + element.id.toString() + ","
+        });
+        
+        
+
+        basket.courseIds = courses.substring(0,courses.length-1)
+        return basket;
+      }
+
+
+  _renderDiscountText(){
+    if(this.props.courseAmount.displayDiscountAmount) {
+         return(
+<View style={{flexDirection:'row'}}>
+
+
+      <Text style={{fontFamily:'Roboto-Regular',fontSize:20,fontWeight:'bold',marginTop:5,marginRight:10}}>TOPLAM :</Text> 
+      <View style={{}}>
+        <View style={{flexDirection:'row'}}>
+        <Text style={{textDecorationLine:'line-through',fontFamily:'Roboto-Regular'}} >
+      {this.props.courseAmount.displayTotalAmount}
+      </Text>
+      <Text style={{fontFamily:'Roboto-Regular',marginLeft:5}} >
+      {`%${this.props.courseAmount.discountRate}`}
+      </Text>
+        </View>
+     
+      <Text style={{fontFamily:'Roboto-Regular',fontSize:18,fontWeight:'bold',}}>
+      {this.props.courseAmount.displayPayTotalAmount}
+      </Text>
+      </View> 
+      </View>
+         )
+    }
+    else {
+      return (
+        <Text style={{fontFamily:'Roboto-Regular',fontSize:20,fontWeight:'bold',marginTop:5}}>TOPLAM : {this.props.courseAmount.displayPayTotalAmount} </Text>
+           
+      )
+    }
   }
+
+  
   componentWillMount() {
-   
+    this.props.getCart();
     console.log(this.props.courses)
+  
   }
   static navigationOptions = {
     title: 'Sepet',
@@ -62,6 +131,7 @@ class CartScreen extends Component<Props> {
 
   renderComponent() {
     if(this.props.courses.length>0) {
+      console.log(this.props.courses)
       return(
         <FlatList
         // contentContainerStyle={{margin:10}}
@@ -72,14 +142,14 @@ class CartScreen extends Component<Props> {
         renderItem={({ item }) =>
         <View style={[styles.inputContainer,{padding:10,flexDirection:'row'}]}>
         <View style={{flex:0.9}}>
-        <Text style={{fontSize:20,fontWeight:'bold',fontFamily:'Roboto-Regular'}}>{item.name} </Text>
+        <Text style={{fontSize:18,fontWeight:'bold',fontFamily:'Roboto-Regular'}}>{item.name} </Text>
         
-        {item.content ? <HTML html={item.content} style={{ fontFamily: 'Roboto-Regular', marginTop: 10, fontSize: 16 }}></HTML> : <Text>{item.name}</Text>}
+        {item.content ? <HTML html={item.content.replace("Açıklama:","")} style={{ fontFamily: 'Roboto-Regular', marginTop: 10, fontSize: 15 }}></HTML> : <Text>{item.name}</Text>}
 
         <Text style={{fontSize:15,fontFamily:'Roboto-Regular',fontWeight:'bold',marginTop:10}}>Fiyat: {item.displayPrice}</Text>
         </View>
         <TouchableOpacity onPress={()=> this.props.removeItemFromCart(item.id.toString(), this.props.courses)} style={{flex:0.1}}>
-        <Icon name="close" size={30} type="material-community" color="#d67676"/>
+        <Icon name="close" size={28} type="material-community" color="#d67676"/>
         </TouchableOpacity>
         
     </View>
@@ -107,13 +177,15 @@ class CartScreen extends Component<Props> {
     return (
 
 
-      <SafeAreaView style={[styles.container,{justifyContent:'space-between',marginTop:20}]}>
+      <SafeAreaView style={[styles.container]}>
         <NavigationEvents
-          onWillFocus={()=> this.props.getCart()}
+          onWillFocus={ ()=> this.props.getCart()
+            
+          }
         />
 
         <ScrollView
-        
+        style={{paddingTop:20}}
         refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
@@ -126,19 +198,19 @@ class CartScreen extends Component<Props> {
             />
           }
         >
-
+    {this.renderDiscountContainer()}
           {this.renderComponent()}
-
+      
        
        
         </ScrollView>
         
        <View style={{width:'100%',padding:10,flexDirection:'row',justifyContent:'space-between',backgroundColor:'#ffe3e3'}}>
-           <Text style={{fontFamily:'Roboto-Regular',fontSize:20,fontWeight:'bold',marginTop:5}}>TOPLAM : {this.props.courses.reduce((prev,next) => prev + parseInt(next.price),0)} ₺</Text>
-           
-           <Button onPress={()=> this.props.navigation.navigate('Address')} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
+           {this._renderDiscountText()}
+           <Button onPress={()=> this.props.navigation.navigate('CheckoutType',{basket : this.getCourses()})} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
                     
        </View>
+
       </SafeAreaView>
     );
   }
@@ -146,7 +218,8 @@ class CartScreen extends Component<Props> {
 
 const mapStateToProps = (state : AppState) => ({
   courses : state.cart.courses,
-  loading : state.cart.loading
+  loading : state.cart.loading,
+  courseAmount : state.cart.courseAmount
 })
 
 function bindToAction(dispatch : any) {

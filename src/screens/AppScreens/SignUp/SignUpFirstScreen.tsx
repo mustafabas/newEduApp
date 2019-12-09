@@ -70,7 +70,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
     
 
     return (
-      <View style={[styles.container, {justifyContent:'flex-start',marginTop:50 }] }>
+      <View style={[styles.container, {justifyContent:'flex-start',paddingTop:50 }] }>
         <KeyboardAvoidingView
 
           behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -122,6 +122,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
                 );
               }}
             </Formik>
+        
           </ScrollView>
         </KeyboardAvoidingView>
         {this.showSimpleMessage()}

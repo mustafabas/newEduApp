@@ -1,14 +1,25 @@
 
 import { AsyncStorage } from "react-native";
 import axios from 'axios'
-import { EDU_API_ADRESS_CITY, EDU_API_GET_CART_LIST, EDU_API_BASE ,EDU_API_COURSE_BASE, EDU_API_ADRESS_LOCALITY, EDU_API_ADRESS_DISTRICT, EDU_API_ADRESS_NEIGHBOORS} from '../../constants'
+import { EDU_API_ADRESS_CITY, EDU_API_GET_CART_LIST, EDU_API_BASE ,EDU_API_COURSE_BASE, EDU_API_ADRESS_LOCALITY, EDU_API_ADRESS_DISTRICT, EDU_API_ADRESS_NEIGHBOORS, EDU_API_GET_BASKET_ID, EDU_API_GET_CREDIT_CARD} from '../../constants'
 import { Dispatch } from "react";
 import { ADDRESS_GET_CITY,SWIPE_CARD,ADRESS_LOADING, ADDRESS_GET_LOCALITY, ADDRESS_GET_DISTRICT, ADDRESS_GET_NEIGHBOOR } from './types'
 import { Action } from "../../models/action";
+import { IBasket } from "../../models/course/coruseItem";
+import { navigate } from "../services/Navigator";
 
 
 
+export interface moneyOrder {
+    bankName : string;
+    disyplayPayTotalAmount : string;
+    ibanNumber : string;
+    orderNo : string;
+    orderType: number;
+    ownerName : string;
 
+
+}
 
 
 export interface adress {
@@ -32,6 +43,106 @@ export function cardSwiped(swiped : boolean) {
 
     }
 }
+
+
+
+export function getBasketId(basket: IBasket) {
+    return (dispatch: Dispatch<Action>) => {
+        dispatch(loading(true));
+        AsyncStorage.multiGet(['userToken', 'userId']).then((res) => {
+            let token = res[0][1];
+            let userId = res[1][1];
+
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              }
+
+            console.log(token)
+            console.log(userId)
+            basket.userId = parseInt(userId);
+            axios.post(EDU_API_GET_BASKET_ID, {
+                userId: basket.userId,
+                cityId: basket.cityId,
+                localityId: basket.localityId,
+                districtId: basket.districtId,
+                neighboorId: basket.neighboorId,
+                adressInfo: basket.adressInfo,
+                companyName: basket.companyName,
+                taxOffice: basket.taxOffice,
+                taxNumber: basket.taxNumber,
+                ipAdress: basket.ipAdress,
+                identityNo: basket.identityNo,
+                courseIds: basket.courseIds,
+                courseType: basket.courseType,
+                orderType: basket.orderType,
+            }, { headers: headers }).then((res) => {
+                if(res.data.isSuccess) {
+                    var moneyOrderTmp = {}  as moneyOrder;
+
+                    let data = res.data.result;
+                        moneyOrderTmp.bankName = data.bankName;
+                        moneyOrderTmp.disyplayPayTotalAmount = data.disyplayPayTotalAmount;
+                        moneyOrderTmp.ibanNumber = data.ibanNumber;
+                        moneyOrderTmp.orderNo = data.orderNo;
+                        moneyOrderTmp.orderType = data.orderType;
+                        moneyOrderTmp.ownerName = data.ownerName;
+                    console.log(data)
+                        
+                    if(basket.orderType ==2 ) {
+                        // havale icin
+                      
+                        
+                        
+                        navigate('MoneyOrder',{moneyOrder : moneyOrderTmp});
+                    }
+                    else if (basket.orderType ==1 ) {
+                        let basketId = data.basketId
+                        console.log(basketId)
+                        // kredi icin
+                        axios.post(EDU_API_GET_CREDIT_CARD, {
+                            basketId: basketId
+                        },{ headers: headers }).then((response) => {
+
+                           if(response.data.isSuccess) {
+                               console.log("Asasd")
+                               console.log(response.data)
+                            let checkoutFormContent = response.data.result.checkoutFormContent;
+
+                                console.log(checkoutFormContent)
+                                navigate('checkoutWeb',{checkoutFormContent : checkoutFormContent})
+               
+
+                           }
+                           else {
+                               console.log("olmadi")
+                           }
+                        }).catch(err=> {
+                            console.log(err)
+                        })
+
+
+                        
+                            }
+
+
+
+                }
+
+                console.log(res)
+            }).catch(err => {
+                console.log(err)
+            })
+
+
+
+        })
+
+        dispatch(loading(false));
+    }
+}
+
+
 
 export function getAdressList(adress : adressType, id : number) {
     console.log("girdi");
@@ -77,7 +188,7 @@ export function getAdressList(adress : adressType, id : number) {
         else if(adress === adressType.DISTRICT){
             dispatch(loading(true));
             console.log(id+"asd")
-            axios.get(EDU_API_ADRESS_DISTRICT+`${id})`).then((res)=>{
+            axios.get(EDU_API_ADRESS_DISTRICT+`${id}`).then((res)=>{
                 if(res.data.isSuccess){
                      res.data.result.forEach(element => {
                          console.log(element.name)
@@ -96,7 +207,7 @@ export function getAdressList(adress : adressType, id : number) {
         else if(adress === adressType.NEIGHBOORS){
             dispatch(loading(true));
             console.log(id+"asd")
-            axios.get(EDU_API_ADRESS_NEIGHBOORS+`${id})`).then((res)=>{
+            axios.get(EDU_API_ADRESS_NEIGHBOORS+`${id}`).then((res)=>{
                 if(res.data.isSuccess){
                      res.data.result.forEach(element => {
                          console.log(element.name)

@@ -6,7 +6,7 @@ import {
   StyleSheet,
 
   View,TextInput,
-  RefreshControl, ViewProps, Picker,Keyboard, KeyboardAvoidingView,TouchableWithoutFeedback
+  RefreshControl, ViewProps, Picker,Keyboard, KeyboardAvoidingView,TouchableWithoutFeedback, TouchableOpacity, Alert, TouchableHighlight
 } from 'react-native';
 
 import { connect } from "react-redux";
@@ -14,17 +14,22 @@ import { connect } from "react-redux";
 import {
   SafeAreaView
 } from 'react-navigation'
-import { Text ,Input} from 'react-native-elements'
+import { Text ,Input, Overlay} from 'react-native-elements'
 import { Button, FloatingLabelInput, LessonSection } from "../../../components";
 import stylesNew from "../../AuthScreens/Login/styles";
 import DeviceInfo from 'react-native-device-info';
-import { adress, getAdressList, adressType } from '../../../redux/actions/CheckoutActions'
+import { adress, getAdressList, adressType ,getBasketId} from '../../../redux/actions/CheckoutActions'
 import { NavigationScreenProp } from 'react-navigation'
+
+import Modal, { ModalContent,SlideAnimation } from 'react-native-modals';
 
 import RNPicker from "rn-modal-picker";
 import { AppState } from '../../../redux/store';
 import { ScrollView } from 'react-native-gesture-handler';
+import { IBasket } from '../../../models/course/coruseItem';
+import { Formik } from 'formik';
 
+import { WebView } from 'react-native-webview';
 
 
 export interface Props {
@@ -32,6 +37,8 @@ export interface Props {
   adressCity: adress[];
   loading: boolean;
   getAdressList: (adress: adressType , id : number) => void;
+  getBasketId: (basket : IBasket) => void;
+
   adressLocality : adress[];
   adressDistrict : adress[];
   adressNeighboor : adress[];
@@ -41,6 +48,11 @@ export interface Props {
 
 
 class AdressInformationScreen extends Component<Props, {}> {
+
+
+  
+
+  
 
 _renderDistrict() {
   if(this.props.adressDistrict.length>0){
@@ -184,19 +196,119 @@ _renderCity() {
   }
 
   _renderAdressInfo(){
-    if(true) {
+    if(this.props.adressDistrict.length>0 && this.props.adressLocality.length>0) {
       return(
-<View style={[stylesNew.inputContainer, { padding: 10 ,paddingBottom:20}]}>
+        <View>
 
-<Text style={{ fontFamily: 'Roboto-Bold', fontSize: 18, marginLeft: 5, marginBottom: 5 }}>
+        
+<View style={{ padding: 0 ,paddingBottom:20}}>
+
+<Text style={{ fontFamily: 'Roboto-Bold', fontSize: 18, marginLeft: 10, marginBottom: 5 }}>
             Adres Bilgisi
          </Text>
-        <Input  
-        multiline numberOfLines={123}
-        scrollEnabled={false}
-        inputContainerStyle={{borderBottomColor:'#e3e3e3'}}
-        inputStyle={{fontFamily:'Roboto-Regular'}}
-         />
+        
+
+<Formik
+              initialValues={{ Adress: "" }}
+
+              onSubmit={ val => this.navigateToOtherScreen(val.Adress)}
+            >
+              {props => {
+        
+                return (
+
+                      <View >
+
+
+                      <View style={stylesNew.inputContainer}>
+                      <Input
+                      multiline numberOfLines={3}
+                        inputStyle={{fontFamily:'Roboto-Regular',fontSize:15}}
+                        placeholder="Adress"
+                        style={{fontFamily:'OpenSans-Regular'}}
+                        value={props.values.Adress}
+                        onChangeText={props.handleChange("Adress")}
+                        onBlur={props.handleBlur("Adress")}
+                        // error={props.touched.email && props.errors.email}
+                        errorMessage= "Lutfen uygun bir kullanici adi girin"
+                        errorStyle={{height: (props.touched.Adress && props.errors.Adress) ? 20 : 0,color:'#a31515'}}             
+                      />
+
+                      </View>
+                      
+
+
+                      
+                      <View style={[stylesNew.inputContainer, { flexDirection: 'row', justifyContent: 'space-evenly', padding: 10,marginTop:10}]}>
+
+<TouchableOpacity key={1} style={{ flexDirection: 'row' }} onPress={this.radioClick.bind(this, 1)}>
+    <View style={{
+        height: 20,
+        width: 20,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#d67676',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }}>
+
+        {
+            1 == this.state.radioSelected ?
+                <View style={{
+                    height: 15,
+                    width: 15,
+                    borderRadius: 7.5,
+                    backgroundColor: '#d67676',
+                }} />
+                : null
+        }
+
+    </View>
+    <Text style={{ paddingLeft: '1%', marginTop: 0, fontFamily: 'Roboto-Regular', fontSize: 18, color: '#474747' }}>Kredi Karti</Text>
+
+</TouchableOpacity>
+
+<TouchableOpacity key={2} style={{ flexDirection: 'row', marginLeft: 50 }} onPress={this.radioClick.bind(this, 2)}>
+    <View style={{
+        height: 20,
+        width: 20,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#d67676',
+        alignItems: 'center',
+        justifyContent: 'center',
+    }}>
+
+        {
+            2 == this.state.radioSelected ?
+                <View style={{
+                    height: 15,
+                    width: 15,
+                    borderRadius: 7.5,
+                    backgroundColor: '#d67676',
+                }} />
+                : null
+        }
+
+    </View>
+    <Text style={{ paddingLeft: '1%', marginLeft: 3, fontFamily: 'Roboto-Regular', color: '#474747', fontSize: 18 }}>Havale</Text>
+</TouchableOpacity>
+
+</View>
+<Button style={{marginBottom:30}} IsDisabled={!(this.props.adressDistrict.length>0 )} text="Devam Et" onPress={()=>props.handleSubmit()} />
+
+
+                  </View>
+                      
+                );
+              }}
+
+            </Formik>
+        
+
+
+
+</View>
 
       </View>
       )
@@ -226,26 +338,39 @@ _renderCity() {
     this.state = {
       placeHolderText: "Sehir Seciniz",
       selectedText: "",
+      cityId : 0,
       selectedTextLocality: "",
       placeHolderTextLocality : "Ilce Seciniz",
+      localityId : 0,
       selectedTextDistrict : "",
 
       placeHolderTextDistrict : "Mahalle Seciniz",
-
+      districtId : 0,
+      visible : false,
       selectedTextNeigboor : "",
-      placeHolderTextNeighboor : "Neigboor seciniz"
-
+      placeHolderTextNeighboor : "Neigboor seciniz",
+      neighboorId : 0,
+      radioSelected: 0,
 
     };
   }
+
+  radioClick(id) {
+    // this.props.RegisterChanged({props:'sex',value:id})
+    this.setState({
+        radioSelected: id
+    })
+}
+
 
   _selectedValue(item, selectedType : adressType) {
    
 
     if(selectedType === adressType.CITY){  
       var tmp = this.props.adressCity[item]
-
-      this.setState({ selectedText: tmp.name });
+      
+      this.setState({ selectedText: tmp.name,
+      cityId : item });
       this.props.getAdressList(adressType.LOCALITY, tmp.id);
     }
     else if (selectedType === adressType.LOCALITY){
@@ -253,19 +378,22 @@ _renderCity() {
       console.log(item)
       var tmp2 = this.props.adressLocality[item]
       console.log(tmp2)
-      this.setState({selectedTextLocality : tmp2.name})
+      this.setState({selectedTextLocality : tmp2.name,
+      localityId: item})
       this.props.getAdressList(adressType.DISTRICT , tmp2.id)
     }
     else if (selectedType ===adressType.DISTRICT) {
       var tmp = this.props.adressDistrict[item]
-      this.setState({selectedTextDistrict : tmp.name})
+      this.setState({selectedTextDistrict : tmp.name,
+      districtId : item})
       this.props.getAdressList(adressType.NEIGHBOORS,tmp.id)
       
     }
     else if (selectedType ===adressType.NEIGHBOORS) {
       var tmp = this.props.adressNeighboor[item]
       
-      this.setState({selectedTextNeigboor : tmp.name})
+      this.setState({selectedTextNeigboor : tmp.name,
+        neighboorId : item})
       // this.props.getAdressList(adressType.NEIGHBOORS,tmp.id)
       
     }
@@ -273,10 +401,37 @@ _renderCity() {
 
   }
 
+  navigateToOtherScreen(val : string){
+    let basket : IBasket = this.props.navigation.getParam('basket') as IBasket;
+    basket.cityId = this.state.cityId;  
+    basket.localityId = this.state.localityId;
+    basket.districtId = this.state.districtId;
+    basket.neighboorId = this.state.neighboorId;
+    basket.orderType = this.state.radioSelected;
+    basket.adressInfo = val
+
+    this.props.getBasketId(basket)
+    console.log(basket)
+    
+  }
 
   render() {
+
+    var html = `
+      <html>
+      <head></head>
+      <body>
+        <script>
+          setTimeout(function () {
+            window.ReactNativeWebView.postMessage("Hello!")
+          }, 2000)
+        </script>
+      </body>
+      </html>
+    `;
+
     return (
-      <SafeAreaView style={{ backgroundColor: '#e3e3e3', flex: 1 ,padding:5,paddingVertical:30}}>
+      <SafeAreaView style={{ backgroundColor: '#e3e3e3', flex: 1 ,padding:5}}>
         <KeyboardAvoidingView 
         enabled
         keyboardVerticalOffset={100}
@@ -285,7 +440,7 @@ _renderCity() {
          >
 
       
-          <ScrollView style={{flex:1}} bounces={true} >
+          <ScrollView style={{flex:1,paddingVertical:30}} bounces={true} >
           
           
 {this._renderCity()}
@@ -293,9 +448,41 @@ _renderCity() {
 {this._renderDistrict()}
 {this._renderNeighboor()}
 {this._renderAdressInfo()}
+<Button text="asd" onPress={()=> this.setState({ visible: true })} ></Button>
+<Modal
+    visible={this.state.visible}
+    swipeDirection={['down']} // can be string or an array
+    swipeThreshold={200} // default 100
+    onSwipeOut={(event) => {
+      this.setState({ visible: false });
+    }}
+    modalAnimation={new SlideAnimation({
+      initialValue: 0, // optional
+      slideFrom: 'bottom', // optional
+      useNativeDriver: true, // optional
+    })}
+    
+    width ={1.0}
+    height= {.9}
+    modalStyle={{marginTop:'23%'}}
 
-<Button text="asdasd" onPress={()=>this.props.navigation.navigate('CreditCart')} />
-          
+  >
+    <ModalContent style={{flex:1}}>
+
+   <View  style={{flex:1}}>
+   <WebView
+    scalesPageToFit = {false}
+        originWhitelist={['*']}
+        source={{uri : `https://www.ikonegitim.com/KrediKarti.aspx?code=317771&kullanici=10092`}}
+        style={{flex:1}}
+      />
+   </View>
+
+
+   
+    </ModalContent>
+  </Modal>
+
 
 {/* <View style={{ flex : 1 }} /> */}
           </ScrollView>
@@ -391,7 +578,9 @@ adressNeighboor : state.courseCheckout.adressNeighboor,
 function bindToAction(dispatch: any) {
   return {
     getAdressList: (adress: adressType , id : number) =>
-      dispatch(getAdressList(adress,id))
+      dispatch(getAdressList(adress,id)),
+      getBasketId : (basket : IBasket) => 
+      dispatch(getBasketId(basket))
   };
 }
 

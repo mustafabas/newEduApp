@@ -196,7 +196,7 @@ export function loginFirstStep(email : string, password : string ) {
     })
     .then((response) => {
       if(response.data.isSuccess) {
-        AsyncStorage.setItem("userID", response.data.result.userId.toString())
+        AsyncStorage.setItem("userId", response.data.result.userId.toString())
         .then(() => {
           dispatch(loginIsSucceed(true));
           dispatch(reset());
@@ -239,7 +239,7 @@ export function loginUserService(activationCode: string) {
 
     var userID = ""
     
-    AsyncStorage.getItem("userID")
+    AsyncStorage.getItem("userId")
     .then((id ) => {
 
       axios.post(EDU_API_LOGIN, {
@@ -296,9 +296,13 @@ export function loginUserService(activationCode: string) {
 
 export function logoutUserService() {
   return new Promise((resolve, reject) => {
-    AsyncStorage.removeItem("userToken")
+    AsyncStorage.multiRemove(["userToken","userId"])
       .then(() => {
-        resolve();
+        resolve(()=> {
+          navigate('AuthLoading')
+        });
+
+
       })
       .catch(error => {
         reject(error);
