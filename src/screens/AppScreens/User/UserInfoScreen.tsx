@@ -4,7 +4,7 @@ import {
   
   KeyboardAvoidingView,
   ScrollView,
-  Platform, TouchableOpacity, Image, StatusBar,StyleSheet
+  Platform, TouchableOpacity, Image, StatusBar,StyleSheet, AsyncStorage
 } from "react-native";
 import { NavigationScreenProp, NavigationState, SafeAreaView } from "react-navigation";
 import {Text,} from 'react-native-elements'
@@ -59,22 +59,39 @@ class UserInfoScreen extends Component<Props, {}> {
   
   }
 
+
+  constructor(props : any) {
+    super(props);
+
+    this.state = {
+      
+      refreshing: false,
+      userIsLogin : false
+    };
+
+  }
+
   
 
-  componentWillMount() {
-    // DeviceInfo.hasNotch().then(hasNotch => {
-    // })
-  }
-  render() {
-    return (
-      <SafeAreaView style={[newStyles.container,{justifyContent:'flex-start'}]} >
-        {this.renderStatusbarOnlyIOS()}
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-        >
+  componentDidMount(){
+    try {
+      AsyncStorage.getItem('userId',(err,item) => {
+        if (item) {
+          this.setState({userIsLogin : true})
+        }
+        else {
 
-          <ScrollView bounces={false} contentContainerStyle={{}}>
-            <View style={{ paddingTop: 70, alignItems: 'center' }}>
+        }
+      });
+      } catch (err) {
+      
+    }
+  }
+renderMainComponents(){
+  if(this.state.userIsLogin) {
+    return(
+<View>
+<View style={{ paddingTop: 70, alignItems: 'center' }}>
               <Avatar
                 onPress={() => this.props.navigation.navigate('App')}
                 rounded
@@ -122,18 +139,25 @@ class UserInfoScreen extends Component<Props, {}> {
               <View style={styles.propsSeperator}></View>
 
               <TouchableOpacity onPress={()=> this.props.navigation.navigate('HelpSupport')} style={styles.profileContainer}>
-                <Icon name="help-rhombus" type="material-community" color="#d67676" size={25} />
+                <Icon name="face-agent" type="material-community" color="#d67676" size={25} />
                 <Text style={styles.profileTextStyle}>Yardim ve Destek</Text>
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
-              
+              <TouchableOpacity onPress={()=> this.props.navigation.navigate('UserGivenOrder')} style={styles.profileContainer}>
+                <Icon name="logout" type="material-community" color="#d67676" size={25} />
+                <Text style={styles.profileTextStyle}>Siparislerim</Text>
+                
+              </TouchableOpacity>
+              <View style={styles.propsSeperator}></View>
               <TouchableOpacity onPress={() => logoutUserService()} style={styles.profileContainer}>
                 <Icon name="logout" type="material-community" color="#d67676" size={25} />
                 <Text style={styles.profileTextStyle}>Cikis Yap</Text>
                 
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
+             
               </View>
+              
 
             </View>
 
@@ -142,8 +166,73 @@ class UserInfoScreen extends Component<Props, {}> {
 
             {/* <Icon size={50} name="info"  style={{width:50,height:50,borderRadius:25, color:'white',backgroundColor:'purple' ,textAlign:'center',overflow:"hidden"}}/>   
             */}
+</View>
+    )
+  }else {
+    return(
+      <View style={[newStyles.inputContainer,{ paddingTop:25,marginTop:60,paddingBottom:30,justifyContent:'flex-start' }]}>
+
+              {/* <Input value="bilal oguz marifet" inputStyle={{ color: Colors.text, fontFamily: 'Roboto-Regular' }} containerStyle={{ marginLeft: -10, marginTop: 20 }} />
+              <Input value="bilalmarifet@gmail.com" inputStyle={{ color: Colors.text, fontFamily: 'Roboto-Regular' }} containerStyle={{ marginLeft: -10, marginTop: 20 }} />
+              <Text style={{ fontFamily: 'Roboto-Regular', fontSize: Fonts.size.regular, fontWeight: '700', color: Colors.text, marginTop: 50 }}>Private Information</Text>
+              <Input leftIconContainerStyle={{ marginLeft: 0 }} leftIcon={
+                <Icon name="phone" />
+              } value="05333728696" inputStyle={{ marginLeft: 5, color: Colors.text, fontFamily: 'Roboto-Regular' }} containerStyle={{ marginLeft: -10, marginTop: 20 }} />
+              <Input leftIconContainerStyle={{ marginLeft: 0 }} leftIcon={
+                <Icon name="lock" />
+              } value="05333728696" inputStyle={{ marginLeft: 5, color: Colors.text, fontFamily: 'Roboto-Regular' }} containerStyle={{ marginLeft: -10, marginTop: 20 }} />
+
+
+              <Button  style={{ width: 100 }} onPress={() => logoutUserService()} text="Cikis Yap">
+
+              </Button> */}
+
+
+              {/* <Text style={{textAlign:'center'}} h4>Bilal Oguz Marifet</Text> */}
+              <View style={{marginBottom:20}}>
+              <TouchableOpacity  style={styles.profileContainer}>
+                <Icon name="help-rhombus" type="material-community" color="#d67676" size={25} />
+                <Text style={styles.profileTextStyle}>Sikca Sorulan Sorular</Text>
+               
+              </TouchableOpacity>
+              
+              <View style={styles.propsSeperator}></View>
+
+              <TouchableOpacity onPress={()=> this.props.navigation.navigate('HelpSupport')} style={styles.profileContainer}>
+                <Icon name="face-agent" type="material-community" color="#d67676" size={25} />
+                <Text style={styles.profileTextStyle}>Yardim ve Destek</Text>
+              </TouchableOpacity>
+              
+              <View style={styles.propsSeperator}></View>
+              <TouchableOpacity onPress={()=> this.props.navigation.navigate('AuthLoading')}  style={styles.profileContainer}>
+                <Icon name="logout" type="material-community" color="#d67676" size={25} />
+                <Text style={styles.profileTextStyle}>Giris Yap</Text>
+                
+              </TouchableOpacity>
+              <View style={styles.propsSeperator}></View>
+             
+              </View>
+              
+
+            </View>
+    )
+  }
+}
+  
+  componentWillMount() {
+    // DeviceInfo.hasNotch().then(hasNotch => {
+    // })
+  }
+  render() {
+    return (
+      <SafeAreaView style={[newStyles.container,{justifyContent:'flex-start'}]} >
+
+
+
+          <ScrollView bounces={true} >
+          {this.renderMainComponents()}
           </ScrollView>
-        </KeyboardAvoidingView>
+
       </SafeAreaView>
     );
   }

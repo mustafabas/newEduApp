@@ -52,22 +52,23 @@ class checkoutWebScreen extends Component<Props, {}> {
       
      
       componentDidMount() { 
-        var creditCardInfo = this.props.navigation.getParam("creditCardInfo") as ICrediCartInfoRequestModel;
+       var creditCardInfo = this.props.navigation.getParam("creditCardInfo") as ICrediCartInfoRequestModel;
  
 
         var url = "http://api.ikonakademi.com/Payment?BasketId="+creditCardInfo.basketId+"&CardNameSurname="+creditCardInfo.nameSurname+"&CreditCardNumber="+creditCardInfo.creditCardNumber+"&Month="+creditCardInfo.month+"&Year="+creditCardInfo.year+"&Cvv2="+creditCardInfo.cvv2;
-        Linking.openURL(url).catch((err) => console.error('An error occurred', err));
-      }
+      Linking.openURL(url).catch((err) => console.error('An error occurred', err));
+      console.log()
+    }
 render(){
    var checkoutFormContent = this.props.navigation.getParam('checkoutFormContent')
-
+   var creditCardInfo = this.props.navigation.getParam("creditCardInfo") as ICrediCartInfoRequestModel;
     // const spin = this.spinValue.interpolate({
     //     inputRange: [0, 1],
     //     outputRange: ['0deg', '360deg']
     //   })
     return(
 <View >
-
+<WebView source={{ uri: "http://api.ikonakademi.com/Payment?BasketId="+creditCardInfo.basketId+"&CardNameSurname="+creditCardInfo.nameSurname+"&CreditCardNumber="+creditCardInfo.creditCardNumber+"&Month="+creditCardInfo.month+"&Year="+creditCardInfo.year+"&Cvv2="+creditCardInfo.cvv2 }} />  
 </View>
 
     )

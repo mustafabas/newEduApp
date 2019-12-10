@@ -36,6 +36,7 @@ import ProfileEditScreen from '../screens/AppScreens/User/ProfileEditScreen'
 import NotificationScreen from "../screens/AppScreens/User/NotificationScreen";
 import SettingsScreen from '../screens/AppScreens/User/SettingsScreen';
 import HelpSupportScreen from '../screens/AppScreens/User/HelpSupportScreen'
+import UserGivenOrderScreen from '../screens/AppScreens/User/UserGivenOrderScreen'
 const MainStack = createStackNavigator(
   {
     Login: { screen: Login },
@@ -79,7 +80,8 @@ const profileStack = createStackNavigator({
   ProfileEdit: ProfileEditScreen,
   Notification: NotificationScreen,
   Settings : SettingsScreen,
-  HelpSupport :HelpSupportScreen
+  HelpSupport :HelpSupportScreen,
+  UserGivenOrder: UserGivenOrderScreen
 },
 {
   navigationOptions : {
@@ -218,7 +220,7 @@ export default createAppContainer(
       
     },
     {
-      initialRouteName: "AuthLoading",
+      initialRouteName: "mainBottomTab",
 
     }
   )

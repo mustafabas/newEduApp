@@ -16,6 +16,7 @@ import {courseType } from '../../../redux/actions/course/homeAction'
 import { removeItemFromCart} from '../../../redux/actions/course/cartAction'
 import HTML from 'react-native-render-html';
 import FlashMessage,{ showMessage, hideMessage, } from "react-native-flash-message";
+import AsyncStorage from "@react-native-community/async-storage";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -114,6 +115,10 @@ class CartScreen extends Component<Props> {
   componentWillMount() {
     this.props.getCart();
     console.log(this.props.courses)
+
+
+
+    AsyncStorage.getItem("userId")
   
   }
   static navigationOptions = {
@@ -127,6 +132,22 @@ class CartScreen extends Component<Props> {
       fontWeight: 'bold',
     },
   };
+
+  userIsLogin() {
+    try {
+      AsyncStorage.getItem('userId',(err,item) => {
+        if (item) {
+          console.log(item)
+          this.props.navigation.navigate('CheckoutType',{basket : this.getCourses()})
+        }
+        else {
+          this.props.navigation.navigate('AuthLoading')
+        }
+      });
+      } catch (err) {
+      
+    }
+  }
 
 
   renderComponent() {
@@ -207,7 +228,7 @@ class CartScreen extends Component<Props> {
         
        <View style={{width:'100%',padding:10,flexDirection:'row',justifyContent:'space-between',backgroundColor:'#ffe3e3'}}>
            {this._renderDiscountText()}
-           <Button onPress={()=> this.props.navigation.navigate('CheckoutType',{basket : this.getCourses()})} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
+           <Button onPress={()=> this.userIsLogin()} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
                     
        </View>
 

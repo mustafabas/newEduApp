@@ -4,7 +4,7 @@ import {
   Text,
   KeyboardAvoidingView,
   ScrollView,
-  Platform, TouchableOpacity,Alert
+  Platform, TouchableOpacity,Alert, Dimensions
 } from "react-native";
 import { WebView } from 'react-native-webview';
 import { NavigationScreenProp, NavigationState } from "react-navigation";
@@ -132,14 +132,20 @@ renderLinkedin(){
 
 
     return (
-      <View style={[styles.container,{backgroundColor:'#b80000'}]}>
+      <View style={[styles.container,{backgroundColor:'#b80000',justifyContent:'flex-start'}]}>
         {/* <LinearGradient style={{flex:1}} colors={['#ff4259', '#db5c6b', '#ffb5be']} > */}
        
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <ScrollView bounces={false}>
-          <Avatar imageProps={{resizeMode:'contain'}} size='large' rounded containerStyle={{alignSelf:'center',marginTop:40,marginBottom:10}} source={require('../../../assets/logo.png')} />
+           <TouchableOpacity onPress={()=> this.props.navigation.navigate('mainBottomTab')} style={{flexDirection:'row',marginTop:50,marginRight:20,justifyContent:'flex-end'}}>
+             <Text style={{fontSize:16,fontFamily:'Roboto-Regular',fontWeight:'500',marginTop:6,color:'white'}}>Geri don</Text>
+
+            <Icon name="chevron-right"  color="white" size={32} />
+
+           </TouchableOpacity>
+          <Avatar imageProps={{resizeMode:'contain'}} size='large' rounded containerStyle={{alignSelf:'center',marginBottom:10,marginTop:Dimensions.get('window').height/5-80}} source={require('../../../assets/logo.png')} />
 
             <Formik
               initialValues={{ email: "", password: "" }}
