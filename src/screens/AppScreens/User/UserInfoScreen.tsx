@@ -12,6 +12,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 
 import { controlUsername } from "../../../redux/actions/signupActions";
+import {getUserInformation, IUser, EditProfile } from '../../../redux/actions/userAction'
 import { Button, FloatingLabelInput } from "../../../components";
 import newStyles from "../../AuthScreens/Login/styles";
 import { connect } from "react-redux";
@@ -25,6 +26,9 @@ import { logoutUserService } from '../../../redux/actions/LoginActions'
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
+  getUserInformation : (type : EditProfile) => void;
+  logoutUserService : () => void;
+  user : IUser;
 
 }
 
@@ -125,10 +129,16 @@ renderMainComponents(){
 
               <Text style={{textAlign:'center'}} h4>Bilal Oguz Marifet</Text>
               <View style={{marginTop:20}}>
-              <TouchableOpacity onPress={()=> this.props.navigation.navigate('ProfileEdit')} style={styles.profileContainer}>
+              <TouchableOpacity onPress={()=> this.props.getUserInformation(EditProfile.generalInfo)} style={styles.profileContainer}>
                 <Icon name="account" type="material-community" color="#d67676" size={25} />
                 <Text style={styles.profileTextStyle}>Profili Duzenle</Text>
                
+              </TouchableOpacity>
+              <View style={styles.propsSeperator}></View>
+              <TouchableOpacity onPress={()=> this.props.getUserInformation(EditProfile.securityInfo)} style={styles.profileContainer}>
+                <Icon name="lock-reset" type="material-community" color="#d67676" size={25} />
+                <Text style={styles.profileTextStyle}>Güvenlik</Text>
+                
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
               <TouchableOpacity onPress={()=> this.props.navigation.navigate('Notification')} style={styles.profileContainer}>
@@ -263,4 +273,23 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect(null, { logoutUserService })(UserInfoScreen)
+
+
+const mapStateToProps = (state: AppState) => ({
+  user : state.user.userInfo,
+ 
+  
+})
+
+function bindToAction(dispatch: any) {
+  return {
+    getUserInformation :  (type : EditProfile) =>
+    dispatch(getUserInformation(type)),
+    logoutUserService : () => 
+    dispatch(logoutUserService())
+  };
+}
+
+
+
+export default connect(mapStateToProps,bindToAction )(UserInfoScreen)

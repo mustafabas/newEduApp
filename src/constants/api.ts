@@ -17,3 +17,7 @@ export const EDU_API_ADRESS_DISTRICT = EDU_API_BASE + 'Adress/Distritcs/'
 export const EDU_API_ADRESS_NEIGHBOORS = EDU_API_BASE + 'Adress/Neighboors/'
 export const EDU_API_ADRESS_LOCALITY = EDU_API_BASE + 'Adress/Localities/'
 export const EDU_API_PAYMENT_BYCREDITCARD = EDU_API_BASE + 'Payment'
+
+export const EDU_API_GET_USER_INFO = EDU_API_BASE + 'User'
+export const EDU_API_UPDATE_USER_INFO = EDU_API_BASE + 'User/Update'
+export const EDU_APO_ORDER_STATUS = EDU_API_BASE + 'basket'

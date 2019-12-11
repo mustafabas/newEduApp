@@ -52,6 +52,18 @@ const loginSchema = Yup.object().shape({
 
 
 class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
+  static navigationOptions = {
+    title: 'Telefon Onayı',
+
+    headerStyle: {
+      backgroundColor: '#d67676',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }
+
   showSimpleMessage() {
     
     if ((this.props.isFinishedCheck && (!this.props.isSucceedCheck)) || (this.props.isFinishedCheckSecond && (!this.props.isSucceedCheckSecond))) {
@@ -124,7 +136,7 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
   render() {
     
     return (
-      <View style={[styles.container, {justifyContent:'flex-start' ,marginTop:50}] }>
+      <View style={[styles.container, {justifyContent:'flex-start' ,paddingTop:50}] }>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >

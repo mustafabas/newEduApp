@@ -72,17 +72,18 @@ export function compareCodes(phoneCode : string,phoneNumber : string) {
       console.log(res)
       if(res === phoneCode) {
         console.log('helalll2 ')
-      AsyncStorage.multiGet(["userMail","userPassword"])
+      AsyncStorage.multiGet(["userMail","userPassword","userNameSurname"])
     .then((response2) => {
       var email = response2[0][1];
       var password = response2[1][1];
-
-      if(email && password) {
+      var nameSurname = response2[2][1];
+      if(email && password && nameSurname) {
 
         axios.post(EDU_API_CREATE_USER, {
           email : email,
           password : password,
-          phoneNumber : phoneNumber
+          phoneNumber : phoneNumber,
+          nameSurname : nameSurname
         })
         .then((response) =>{
           console.log(email + password + phoneNumber)
@@ -135,7 +136,7 @@ export function compareCodes(phoneCode : string,phoneNumber : string) {
   }
 }
 
-export function controlemail(email: string) {
+export function controlemail(email: string,username: string) {
   return (dispatch: Dispatch<Action>) => {
     dispatch(controlemailStarted());
     axios.post(EDU_API_CONTROL_EMAIL, {
@@ -145,7 +146,8 @@ export function controlemail(email: string) {
         if (response.data.isSuccess) {
 
           console.log("sssss")
-          AsyncStorage.setItem("userMail", email)
+
+          AsyncStorage.multiSet([["userMail", email],["userNameSurname" ,username]])
             .then(() => {
               // dispatch(loading(false)); 
 

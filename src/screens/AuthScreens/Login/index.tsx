@@ -53,6 +53,12 @@ const loginSchema = Yup.object().shape({
 });
 
 class Login extends Component<Props, {}> {
+  static navigationOptions = {
+
+
+    header: null
+  };
+
 
   showSimpleMessage() {
 

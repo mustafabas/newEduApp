@@ -23,12 +23,14 @@ interface Props {
   isLoadingCheck : boolean;
   isFinishedCheck: boolean;
   isSucceedCheck : boolean;
-  controlemail : (email : string) => void;
+  controlemail : (email : string,username: string) => void;
 }
 
 
 interface userMail {
   email:string;
+  nameSurname : string;
+
 
 }
 
@@ -37,11 +39,27 @@ const loginSchema = Yup.object().shape({
   email: Yup.string()
     .min(4)
     .email()
-    .required()
+    .required(),
+    nameSurname : Yup.string()
+    .min(4)
+    .required(),
 
 });
 
 class SignUpFirstScreen extends Component<Props, {}> {
+
+  static navigationOptions = {
+    title: 'Kullanıcı Bilgileri',
+
+    headerStyle: {
+      backgroundColor: '#d67676',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }
+
   showSimpleMessage() {
 
     if (this.props.isFinishedCheck && (!this.props.isSucceedCheck)) {
@@ -60,7 +78,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
     const { navigation ,controlemail} = this.props;
 
     console.log('before action ' + this.props.isLoadingCheck)
-    controlemail(values.email);
+    controlemail(values.email,values.nameSurname);
     console.log('after action ' + values.email)
   };
 
@@ -77,7 +95,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
         >
           <ScrollView  bounces={false}>
             <Formik
-              initialValues={{ email: "" }}
+              initialValues={{ email: "",nameSurname : "" }}
               validationSchema={loginSchema}
               onSubmit={ val=> this.handleLogin(val)}
             >
@@ -94,7 +112,19 @@ class SignUpFirstScreen extends Component<Props, {}> {
                     <Text h3  style={{fontFamily:'OpenSans-Regular', alignSelf: 'center', marginTop: 30}}> Email Adresiniz</Text>
                     <Text style={{ fontFamily:'OpenSans-Regular',alignSelf: 'center', marginTop: 5}}> Hesabini olusturmak icin mailini yaz.</Text>
                     <View style={[styles.inputContainer,{padding:10,marginTop:20}]}>
+                    <Input
+                        inputStyle={{fontFamily:'OpenSans-Regular',fontSize:15}}
+                        placeholder="İsim soyisim"
+                        style={{fontFamily:'OpenSans-Regular'}}
+                        value={props.values.nameSurname}
+                        onChangeText={props.handleChange("nameSurname")}
+                        onBlur={props.handleBlur("nameSurname")}
+                        // error={props.touched.email && props.errors.email}
+                        errorMessage= "Lutfen uygun bir isim giriniz"
+                        errorStyle={{height: (props.touched.nameSurname && props.errors.nameSurname) ? 20 : 0,color:'#a31515'}}
                         
+                        
+                      />
                       <Input
                         inputStyle={{fontFamily:'OpenSans-Regular',fontSize:15}}
                         placeholder="email"
@@ -103,11 +133,13 @@ class SignUpFirstScreen extends Component<Props, {}> {
                         onChangeText={props.handleChange("email")}
                         onBlur={props.handleBlur("email")}
                         // error={props.touched.email && props.errors.email}
-                        errorMessage= "Lutfen uygun bir kullanici adi girin"
+                        errorMessage= "Lutfen uygun bir email girin"
                         errorStyle={{height: (props.touched.email && props.errors.email) ? 20 : 0,color:'#a31515'}}
                         
                         
                       />
+                     
+
                      
                       
                         <Button loading={this.props.isLoadingCheck}  text="Continue" onPress={()=> props.handleSubmit()} />
@@ -142,8 +174,8 @@ const mapStateToProps = (state : AppState) => ({
 
 function bindToAction(dispatch : any) {
   return {
-    controlemail : (email : string) =>
-    dispatch(controlemail(email)) 
+    controlemail : (email : string,username: string) =>
+    dispatch(controlemail(email,username)) 
   };
 }
 

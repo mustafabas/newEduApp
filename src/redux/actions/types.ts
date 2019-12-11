@@ -32,6 +32,8 @@ export const COURSE_IS_ADDED = "courseIsAdded";
 export const RESET_MESSAGE = "resetMessage";
 
 
+export const GET_USER_INFO = "getUserInfo";
+export const USER_UPDATE_FAIL = "userUpdateFail"
 
 export const CART_GET_COURSE = "cartGetCourses";
 export const CART_LOADING = "cartLoading";
@@ -47,6 +49,7 @@ export const SWIPE_CARD = "swipeCard"
 export const ADRESS_LOADING = "addressLoading"
 export const CreditCard_LOADING = "CreditCardLoading"
 export const CreditCard_Message = "CreditCardMessage";
+export const ORDER_STATUS_GET_LIST = "orderStatusGetList"
 export const ERROR_CODE = "errorCode";
 
 export const COUNT_DOWN = "countDown"

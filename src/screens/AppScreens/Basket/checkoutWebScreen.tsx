@@ -12,7 +12,7 @@ import {
 import { connect } from "react-redux";
 // var SafariView = require('react-native-safari-view');
 import {
-  SafeAreaView
+  SafeAreaView, NavigationActions
 } from 'react-navigation'
 import { Text ,Input} from 'react-native-elements'
 import { Button, FloatingLabelInput, LessonSection } from "../../../components";
@@ -67,8 +67,8 @@ render(){
     //     outputRange: ['0deg', '360deg']
     //   })
     return(
-<View >
-<WebView source={{ uri: "http://api.ikonakademi.com/Payment?BasketId="+creditCardInfo.basketId+"&CardNameSurname="+creditCardInfo.nameSurname+"&CreditCardNumber="+creditCardInfo.creditCardNumber+"&Month="+creditCardInfo.month+"&Year="+creditCardInfo.year+"&Cvv2="+creditCardInfo.cvv2 }} />  
+<View>
+  {this.props.navigation.popToTop()}
 </View>
 
     )

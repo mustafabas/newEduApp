@@ -37,19 +37,8 @@ import NotificationScreen from "../screens/AppScreens/User/NotificationScreen";
 import SettingsScreen from '../screens/AppScreens/User/SettingsScreen';
 import HelpSupportScreen from '../screens/AppScreens/User/HelpSupportScreen'
 import UserGivenOrderScreen from '../screens/AppScreens/User/UserGivenOrderScreen'
-const MainStack = createStackNavigator(
-  {
-    Login: { screen: Login },
-    Home: { screen: HomeScreen },
-    CourseDetail : { screen :CourseDetail },
-    UserInfo : {screen: UserInfoScreen}
-  },
-  {
-    initialRouteName: "Home",
-    // headerMode: "none",
+import securityProfileEditScreen from '../screens/AppScreens/User/securityProfileEditScreen'
 
-  }
-);
 
 const myCourse = createStackNavigator({
   MyCourse : MyCourses,
@@ -81,13 +70,29 @@ const profileStack = createStackNavigator({
   Notification: NotificationScreen,
   Settings : SettingsScreen,
   HelpSupport :HelpSupportScreen,
-  UserGivenOrder: UserGivenOrderScreen
+  UserGivenOrder: UserGivenOrderScreen,
+  securityProfileEdit : {screen : securityProfileEditScreen}
 },
 {
   navigationOptions : {
     tabBarLabel : 'Profilim'
   }
 })
+
+const MainStack = createStackNavigator(
+  {
+    Login: { screen: Login },
+    Home: { screen: HomeScreen },
+    CourseDetail : { screen :CourseDetail },
+    UserInfo : {screen: profileStack},
+   
+  },
+  {
+    initialRouteName: "Home",
+    // headerMode: "none",
+
+  }
+);
 
 
 EducationVideoStack.navigationOptions = ( navigation:any ) => {
@@ -200,7 +205,16 @@ const AuthStack = createStackNavigator(
   },
   {
     initialRouteName: "Login",
-    headerMode: "none"
+    // headerMode: "none"
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#d67676',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+    },
   }
 );
 
@@ -216,7 +230,7 @@ export default createAppContainer(
       MainStack : MainStack,
       mainBottomTab: mainBottomTab,
       VideoScreen: VideoScreen,
-     
+      CreditCart:CreditCartScreen
       
     },
     {

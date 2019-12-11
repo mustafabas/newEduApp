@@ -1,7 +1,7 @@
-import { ADDRESS_GET_CITY,ADDRESS_GET_LOCALITY,ADRESS_LOADING, ADDRESS_GET_DISTRICT, ADDRESS_GET_NEIGHBOOR, SWIPE_CARD } from "../actions/types";
+import { ADDRESS_GET_CITY,ADDRESS_GET_LOCALITY,ADRESS_LOADING, ADDRESS_GET_DISTRICT, ADDRESS_GET_NEIGHBOOR, SWIPE_CARD, ORDER_STATUS_GET_LIST } from "../actions/types";
 import { Action } from "../../models/action";
 import { HomeState } from "../../models/state";
-import { adress } from "../actions/CheckoutActions";
+import { adress, IorderStatus } from "../actions/CheckoutActions";
 
 export interface AdressState {
     loading: boolean;
@@ -10,6 +10,8 @@ export interface AdressState {
     adressDistrict : adress[];
     adressNeighboor : adress[];
     isCardSwiped : boolean,
+    orderList : IorderStatus[];
+
   }
   
 
@@ -19,7 +21,9 @@ const intialState = {
   adressLocality: [],
   adressDistrict : [],
   adressNeighboor : [],
-  isCardSwiped : false 
+  isCardSwiped : false ,
+  orderList : [],
+
 };
 
 export default (state: AdressState = intialState, action: Action) => {
@@ -62,6 +66,13 @@ export default (state: AdressState = intialState, action: Action) => {
         return {
           ...state, 
           isCardSwiped : action.payload
+        }
+
+      case ORDER_STATUS_GET_LIST:
+        return {
+          ...state,
+          orderList : action.payload,
+          loading : false
         }
 
     default:

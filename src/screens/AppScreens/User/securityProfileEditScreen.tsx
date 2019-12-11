@@ -22,37 +22,54 @@ import { Avatar, Input,Icon } from 'react-native-elements';
 import Fonts from '../../../Theme/Fonts'
 import Colors from '../../../Theme/Colors'
 import { logoutUserService } from '../../../redux/actions/LoginActions'
-import { IUser, userInfoUpdatePersonal } from "../../../redux/actions/userAction";
+import { IUser, userInfoUpdatePersonal, userUpdatePassword } from "../../../redux/actions/userAction";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
   user : IUser;
-  userInfoUpdatePersonal : (email : string,nameSurname : string ) => void;
+  userUpdatePassword :  (ownPassword : string, newPassword : string )=> void;
   loading : false;
   isSucceed : false;
   isTried : false;
 }
 
+function equalTo(ref: any, msg: any) {
+    return Yup.mixed().test({
+      name: 'equalTo',
+      exclusive: false,
+      message: msg || '${path} must be the same as ${reference}',
+      params: {
+        reference: ref.path,
+      },
+      test: function(value: any) {
+        return value === this.resolve(ref);
+      },
+    });
+  }
+  Yup.addMethod(Yup.string, 'equalTo', equalTo);
+  
+
 const loginSchema = Yup.object().shape({
-  userNameSurname: Yup.string()
+    ownPassword: Yup.string()
     .min(4)
     .required(),
-    email : Yup.string()
-    .email()
-    .required()
+    newPassword : Yup.string()
+    .required(),
+    newPasswordSame : Yup.string().equalTo(Yup.ref('newPassword'), 'Passwords must match').required('Required'),
 
 });
 
 interface personeInfo {
-  email : string;
-  userNameSurname : string;
+  ownPassword : string;
+  newPassword : string;
+
 }
 
-class ProfileEditScreen extends Component<Props, {}> {
+class securityProfileEditScreen extends Component<Props, {}> {
 
 
   static navigationOptions = {
-    title: 'Profil Duzenle',
+    title: 'Güvenlik',
 
     headerStyle: {
       backgroundColor: '#d67676',
@@ -71,8 +88,8 @@ class ProfileEditScreen extends Component<Props, {}> {
 
   handleLogin = (values : personeInfo) => {
     console.log("niye")
-    console.log(values.email)
-    this.props.userInfoUpdatePersonal(values.email,values.userNameSurname)
+
+    this.props.userUpdatePassword(values.ownPassword,values.newPassword)
   }
 
   
@@ -98,7 +115,7 @@ class ProfileEditScreen extends Component<Props, {}> {
             
 
             <Formik
-              initialValues={{ email: this.props.user.email,userNameSurname: this.props.user.nameSurname }}
+              initialValues={{ ownPassword: "",newPassword : "",newPasswordSame : "" }}
               validationSchema={loginSchema}
               onSubmit={ val=> this.handleLogin(val)}
             >
@@ -109,34 +126,48 @@ class ProfileEditScreen extends Component<Props, {}> {
                   
                   <View style={{justifyContent:'center'}}>
                     <View style={[newStyles.inputContainer,{paddingVertical:20,paddingBottom:30,justifyContent:'flex-start'}]}>
-            <Text style={styles.headerTextStyle}>Kisisel Bilgiler</Text>
+            <Text style={[styles.headerTextStyle,{marginBottom:20}]}>Şifre Değiştirme</Text>
               
               <Input leftIconContainerStyle={styles.leftIconContainerStyle} 
               leftIcon={
-                <Icon name="person" color="#d67676"/>}
+                <Icon name="lock-open" color="#d67676"/>}
                 inputStyle={{fontFamily:'OpenSans-Regular',fontSize:15}}
-                placeholder="userNameSurname"
+                placeholder="Mevcut Sifreniz"
                 style={{fontFamily:'OpenSans-Regular'}}
-                value={props.values.userNameSurname}
-                onChangeText={props.handleChange("userNameSurname")}
-                onBlur={props.handleBlur("userNameSurname")}
+                value={props.values.ownPassword}
+                onChangeText={props.handleChange("ownPassword")}
+                onBlur={props.handleBlur("ownPassword")}
                 // error={props.touched.email && props.errors.email}
-                errorMessage= "Lutfen uygun bir kullanici adi girin"
-                errorStyle={{height: (props.touched.userNameSurname && props.errors.userNameSurname) ? 20 : 0,color:'#a31515'}}
+                errorMessage= "Uygun bir sifre giriniz"
+                errorStyle={{height: (props.touched.ownPassword && props.errors.ownPassword) ? 20 : 0,color:'#a31515'}}
                 />
               <Input  leftIconContainerStyle={styles.leftIconContainerStyle} 
               leftIcon={
-                <Icon name="mail"  color="#d67676"/>}
+                <Icon name="lock"  color="#d67676"/>}
                  inputStyle={{fontFamily:'OpenSans-Regular',fontSize:15}}
-                 placeholder="email"
+                 placeholder="Yeni Şifreniz"
                  style={{fontFamily:'OpenSans-Regular'}}
-                 value={props.values.email}
-                 onChangeText={props.handleChange("email")}
-                 onBlur={props.handleBlur("email")}
+                 value={props.values.newPassword}
+                 onChangeText={props.handleChange("newPassword")}
+                 onBlur={props.handleBlur("newPassword")}
                  // error={props.touched.email && props.errors.email}
-                 errorMessage= "Lutfen uygun bir email girin"
-                 errorStyle={{height: (props.touched.email && props.errors.email) ? 20 : 0,color:'#a31515'}}
+                 errorMessage= "Uygun sifre Giriniz"
+                 errorStyle={{height: (props.touched.newPassword && props.errors.newPassword) ? 20 : 0,color:'#a31515'}}
                   />
+                  <Input  leftIconContainerStyle={styles.leftIconContainerStyle} 
+              leftIcon={
+                <Icon name="lock"  color="#d67676"/>}
+                 inputStyle={{fontFamily:'OpenSans-Regular',fontSize:15}}
+                 placeholder="Yeni Şifreniz Tekrar"
+                 style={{fontFamily:'OpenSans-Regular'}}
+                 value={props.values.newPasswordSame}
+                 onChangeText={props.handleChange("newPasswordSame")}
+                 onBlur={props.handleBlur("newPasswordSame")}
+                 // error={props.touched.email && props.errors.email}
+                 errorMessage= "Uygun sifre Giriniz"
+                 errorStyle={{height: (props.touched.newPasswordSame && props.errors.newPasswordSame) ? 20 : 0,color:'#a31515'}}
+                  />
+
                    <Button loading={this.props.loading}  style={{marginHorizontal:50,marginTop:40}} text="Guncelle" onPress={()=> props.handleSubmit()} />
             </View>
                     {/* <View style={styles.headStyle}>
@@ -205,8 +236,8 @@ const mapStateToProps = (state: AppState) => ({
 
 function bindToAction(dispatch: any) {
   return {
-    userInfoUpdatePersonal : (email : string,nameSurname : string ) => 
-    dispatch(userInfoUpdatePersonal(email,nameSurname)),
+    userUpdatePassword :  (ownPassword : string, newPassword : string ) => 
+    dispatch(userUpdatePassword(ownPassword,newPassword)),
 
   };
 }
@@ -228,4 +259,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default connect(mapStateToProps,bindToAction)(ProfileEditScreen)
+export default connect(mapStateToProps,bindToAction)(securityProfileEditScreen)

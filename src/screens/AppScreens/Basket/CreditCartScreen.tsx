@@ -101,8 +101,8 @@ class CreditCartScreen extends Component<Props, {}> {
 creditCardNumber:values.cardNumber,
 cvv2:values.cvv,
 nameSurname:values.name,
-month:"04",
-year:"24"
+month:values.expireDate.substr(0,2),
+year:values.expireDate.substr(2,2)
     };
     payWithCreditCard(creditCardInfo);
       };
