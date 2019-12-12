@@ -4,7 +4,7 @@ import { Dispatch } from "react";
 import { CONTROL_EMAIL_STARTED,RESET_PROPS, CONTROL_EMAIL_FAILED, CONTROL_EMAIL_SUCCEED,PHONE_CODE_COMPARE_STARTED,PHONE_CODE_COMPARE_FAILED,PHONE_CODE_COMPARE_SUCCEED, SAVE_PASSWORD_STARTED, SAVE_PASSWORD_FAILED,ERROR_CODE, SAVE_PASSWORD_SUCCEED ,CREATE_USER_STARTED,PHONE_CODE_RECEIVED_FAILED,PHONE_CODE_RECEIVED_SUCCEED, COUNT_DOWN, GET_USER_INFO, USER_UPDATE_FAIL} from './types'
 
 import axios from "axios";
-import { EDU_API_CONTROL_EMAIL,EDU_API_GET_USER_INFO,EDU_API_CREATE_USER,EDU_API_CREATE_USER_PHONE_VERIFY, EDU_API_UPDATE_USER_INFO } from '../../constants'
+import { EDU_API_CONTROL_EMAIL,EDU_API_GET_USER_INFO,EDU_API_CREATE_USER,EDU_API_CREATE_USER_PHONE_VERIFY, EDU_API_UPDATE_USER_INFO, EDU_API_UPDATE_PASSWORD } from '../../constants'
 import { navigate } from "../services/Navigator";
 
 
@@ -35,7 +35,7 @@ export interface IUser {
 
 
 
-export function userUpdatePassword (ownPassword : string, newPassword : string ,newPasswordSame : string) {
+export function userUpdatePassword (ownPassword : string, newPassword : string ) {
     return async(dispatch : Dispatch<Action>) => {
         dispatch(loading(true))
 console.log('Asdasds')
@@ -58,17 +58,21 @@ console.log('Asdasds')
 
 
         
-        axios.post(EDU_API_UPDATE_USER_INFO ,{
-            ownPassword: ownPassword,
+        axios.post(EDU_API_UPDATE_PASSWORD ,{
+
+
+            oldPassword: ownPassword,
             newPassword: newPassword,
+            userId: userId
           },{ headers: headers }).then((res) => {
 
             if(res.data.isSuccess){
-                console.log("oldumuu")
+
                 dispatch(reset())
                 navigate('UserInfo')
             }else {
-                console.log(res.data.message)
+                dispatch(userUpdateFail())
+                dispatch(reset())
 
             }
         }).catch(err=> {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, FlatList, ActivityIndicator, StatusBar, TouchableOpacity,RefreshControl} from "react-native";
+import { View, FlatList, ActivityIndicator, StatusBar, TouchableOpacity,RefreshControl,AsyncStorage} from "react-native";
 import { NavigationScreenProp, NavigationState,SafeAreaView ,NavigationEvents} from "react-navigation";
 import { connect } from "react-redux";
 import {Text, Button} from 'react-native-elements'
@@ -16,7 +16,7 @@ import {courseType } from '../../../redux/actions/course/homeAction'
 import { removeItemFromCart} from '../../../redux/actions/course/cartAction'
 import HTML from 'react-native-render-html';
 import FlashMessage,{ showMessage, hideMessage, } from "react-native-flash-message";
-import AsyncStorage from "@react-native-community/async-storage";
+
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -141,7 +141,7 @@ return (       <View style={{width:'100%',padding:10,flexDirection:'row',justify
     },
   };
 
-  userIsLogin() {
+    userIsLogin() {
     try {
       AsyncStorage.getItem('userId',(err,item) => {
         if (item) {

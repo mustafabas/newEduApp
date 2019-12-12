@@ -37,7 +37,11 @@ export interface Props {
   cardSwiped : (swiped : boolean) => void;
   isCardSwiped : boolean;
   loadingCard:boolean;
-  CardErrorMessage:string;
+
+  errorMessage : string;
+  loading : boolean;
+  isTried :boolean;
+  isSucceed : boolean;
   payWithCreditCard: (creditCardInfo: ICrediCartInfoRequestModel) => void
 };
 
@@ -52,7 +56,7 @@ cvv:string;
 
 class CreditCartScreen extends Component<Props, {}> {
     static navigationOptions = {
-        title: 'Adres Sayfasi',
+        title: 'Ödeme Sayfası',
     
         headerStyle: {
           backgroundColor: '#d67676',
@@ -66,10 +70,10 @@ class CreditCartScreen extends Component<Props, {}> {
       
   showSimpleMessage() {
 
-    if (this.props.CardErrorMessage) {
+    if (this.props.isTried && !(this.props.isSucceed)) {
 
       showMessage({
-        message: this.props.CardErrorMessage,
+        message: this.props.errorMessage,
         type: "danger",
         icon: 'auto'
       }
@@ -387,9 +391,11 @@ errorStyle={{height: (props.touched.expireDate && props.errors.expireDate) ? 20 
 
 const mapStateToProps = (state: AppState) => ({
   isCardSwiped : state.courseCheckout.isCardSwiped,
-  loadingCard : state.cart.loadingCard,
-  errorMessage : state.cart.CardErrorMessage
-  
+  // loadingCard : state.cart.loadingCard,
+  errorMessage : state.courseCheckout.CardErrorMessage,
+  loading : state.courseCheckout.loading,
+  isTried : state.courseCheckout.isTried,
+    isSucceed : state.courseCheckout.isSucceed,
 })
 
 function bindToAction(dispatch: any) {

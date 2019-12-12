@@ -30,11 +30,7 @@ export default (state: cartState = intialState, action: Action) => {
       ...state,
       loadingCard:action.payload
     }
-    case CreditCard_Message:
-        return{
-          ...state,
-          CardErrorMessage:action.payload
-        }
+   
     default:
       return {
         ...state

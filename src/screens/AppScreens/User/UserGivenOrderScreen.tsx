@@ -4,7 +4,7 @@ import {
 
     KeyboardAvoidingView,
     ScrollView,
-    Platform, TouchableOpacity, Image, StatusBar, StyleSheet, Switch,FlatList
+    Platform, TouchableOpacity, Image, StatusBar, StyleSheet, Switch,FlatList, AsyncStorage
 } from "react-native";
 import { NavigationScreenProp, NavigationState, SafeAreaView } from "react-navigation";
 import { Text, } from 'react-native-elements'
@@ -36,6 +36,13 @@ interface Props {
 
 class UserGivenOrderScreen extends Component<Props, {}> {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+          userId : ""
+    
+        };
+      }
 
 
 
@@ -65,6 +72,8 @@ class UserGivenOrderScreen extends Component<Props, {}> {
         var textFirst = ""
         var textSecond = ""
         var moneyIsTaken = false
+        var basketId = item.basketId
+        var userId = this.state.userId
         if(item.orderStatus === OrderStatus.InBasket) {
             color = colorInBasket
             textSecond = "Ödeme Yapınız"
@@ -84,8 +93,10 @@ class UserGivenOrderScreen extends Component<Props, {}> {
             if(item.paymentType === OrderType.Havale) {
                 textSecond = "İşlemde"
                 moneyIsTaken = true
+                
             }
             else {
+                color = colorInBasket
                 textSecond = "Başarısız"
             }
     
@@ -128,7 +139,7 @@ class UserGivenOrderScreen extends Component<Props, {}> {
                     </View>
         
                 </View>
-                <TouchableOpacity  style={{ borderBottomColor: 'red', borderBottomWidth: moneyIsTaken ? 0 : 1, alignItems: 'center', marginHorizontal: 20 }}>
+                <TouchableOpacity disabled={moneyIsTaken} onPress={()=> this.props.navigation.navigate('CreditCart', {basketId: basketId, userId:userId})}  style={{ borderBottomColor: 'red', borderBottomWidth: moneyIsTaken ? 0 : 1, alignItems: 'center', marginHorizontal: 20 }}>
                     <Text style={{ marginTop: 20 }}>
                        {moneyIsTaken ? "" : "Ödeme Alınamadı"}
                     </Text>
@@ -213,6 +224,7 @@ class UserGivenOrderScreen extends Component<Props, {}> {
 
     componentWillMount() {
        this.props.getOrderStatus()
+       this.setState({userId :  AsyncStorage.getItem('userId')})
     }
     render() {
         return (

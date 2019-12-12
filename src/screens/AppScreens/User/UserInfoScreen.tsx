@@ -157,7 +157,7 @@ renderMainComponents(){
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
               <TouchableOpacity onPress={()=> this.props.navigation.navigate('UserGivenOrder')} style={styles.profileContainer}>
-                <Icon name="logout" type="material-community" color="#d67676" size={25} />
+                <Icon name="basket" type="material-community" color="#d67676" size={25} />
                 <Text style={styles.profileTextStyle}>Siparislerim</Text>
                 
               </TouchableOpacity>

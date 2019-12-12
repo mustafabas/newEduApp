@@ -69,6 +69,7 @@ const profileStack = createStackNavigator({
   Settings : SettingsScreen,
   HelpSupport :HelpSupportScreen,
   UserGivenOrder: UserGivenOrderScreen,
+  CreditCart :CreditCartScreen,
   securityProfileEdit : {screen : securityProfileEditScreen}
 },
 {

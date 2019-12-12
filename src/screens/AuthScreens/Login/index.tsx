@@ -241,8 +241,10 @@ onError={err => console.log(err)}
 
 />
 
+
                     
               </View>
+              
                       
                       
                     </View>
@@ -252,6 +254,12 @@ onError={err => console.log(err)}
                 );
               }}
             </Formik>
+            <View style={{flexDirection:'row',flexWrap: 'wrap',justifyContent:'center',marginTop:10}}>
+                <Text style={{fontSize:16 ,fontWeight:'100'}}>Giriş yaparak </Text>
+                <TouchableOpacity><Text style={{fontSize:16}}>kullanıcı sözleşmesini</Text></TouchableOpacity>
+                  <Text style={{fontSize:16 ,fontWeight:'100'}}> ve </Text><TouchableOpacity>
+                    <Text style={{fontSize:16}}>gizlilik sözleşmesini </Text></TouchableOpacity><Text style={{fontSize:16 ,fontWeight:'100'}}> kabul etmiş sayılırsınız</Text>
+              </View>
               
           </ScrollView>
         </KeyboardAvoidingView>

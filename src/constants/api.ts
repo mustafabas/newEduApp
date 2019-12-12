@@ -20,4 +20,5 @@ export const EDU_API_PAYMENT_BYCREDITCARD = EDU_API_BASE + 'Payment'
 
 export const EDU_API_GET_USER_INFO = EDU_API_BASE + 'User'
 export const EDU_API_UPDATE_USER_INFO = EDU_API_BASE + 'User/Update'
+export const EDU_API_UPDATE_PASSWORD = EDU_API_BASE +'User/ChangePassword'
 export const EDU_APO_ORDER_STATUS = EDU_API_BASE + 'basket'

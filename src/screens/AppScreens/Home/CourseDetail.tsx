@@ -185,7 +185,7 @@ class CourseDetail extends Component<Props> {
     margin:10,
     
     shadowColor: '#969696',backgroundColor: 'white',
-    marginTop: Platform.OS=="ios" ? 0 : 300,
+    marginTop: 0,
     shadowOffset: {width: 3, height: 3 },
     shadowOpacity: .5,
     borderRadius: 5,

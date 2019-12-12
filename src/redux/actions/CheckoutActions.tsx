@@ -7,6 +7,7 @@ import { ADDRESS_GET_CITY, SWIPE_CARD, ADRESS_LOADING, ADDRESS_GET_LOCALITY, ADD
 import { Action } from "../../models/action";
 import { IBasket, ICrediCartInfo, ICrediCartInfoRequestModel } from "../../models/course/coruseItem";
 import { navigate } from "../services/Navigator";
+import { reset } from "./LoginActions";
 
 
 
@@ -165,7 +166,7 @@ export function getBasketId(basket: IBasket) {
                     moneyOrderTmp.orderType = data.orderType;
                     moneyOrderTmp.ownerName = data.ownerName;
                     console.log(data)
-
+                    AsyncStorage.removeItem('products')
                     if (basket.orderType == 2) {
                         // havale icin
                         navigate('MoneyOrder', { moneyOrder: moneyOrderTmp });
@@ -330,8 +331,10 @@ console.log("gelen data", creditCardInfo);
                     navigate('checkoutWeb', { creditCardInfo:creditCardInfo });
                 }
                 else {
-                    dispatch(creditCardloading(false));
+                    // dispatch(creditCardloading(false));
+
                     dispatch(creditCardMessage(response.data.message));
+                    dispatch(reset())
                 }
             }).catch(err => {
                 console.log(err)

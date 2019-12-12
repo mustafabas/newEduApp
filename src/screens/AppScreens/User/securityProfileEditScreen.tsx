@@ -23,6 +23,7 @@ import Fonts from '../../../Theme/Fonts'
 import Colors from '../../../Theme/Colors'
 import { logoutUserService } from '../../../redux/actions/LoginActions'
 import { IUser, userInfoUpdatePersonal, userUpdatePassword } from "../../../redux/actions/userAction";
+import FlashMessage,{ showMessage, hideMessage, } from "react-native-flash-message";
 
 interface Props {
   navigation: NavigationScreenProp<NavigationState>;
@@ -66,6 +67,23 @@ interface personeInfo {
 }
 
 class securityProfileEditScreen extends Component<Props, {}> {
+
+
+
+  showSimpleMessage() {
+
+    if (this.props.isTried && (!this.props.isSucceed)) {
+
+      showMessage({
+        message: "Hatalı Şifre Girdiniz ",
+        type: "danger",
+        icon: 'auto'
+      }
+      );
+    }
+  
+  }
+
 
 
   static navigationOptions = {
@@ -220,6 +238,8 @@ class securityProfileEditScreen extends Component<Props, {}> {
             */}
           </ScrollView>
         </KeyboardAvoidingView>
+
+        {this.showSimpleMessage()}
       </SafeAreaView>
     );
   }

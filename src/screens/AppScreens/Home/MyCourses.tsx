@@ -130,6 +130,12 @@ class MyCourses extends Component<Props, {}> {
       )
            
       
+          }else {
+            return (
+              <TouchableOpacity onPress={()=>this.props.navigation.navigate('Education')} style={{flex:1,margin:30,paddingVertical:20,borderWidth:1,borderColor:'#c2c2c2',borderRadius:5,padding:10,alignItems:'center'}}>
+          <Text style={{textAlign:'center',color:'#a14040',fontFamily:'Roboto-Regular',fontSize:16}}>Ana Sayfadan Kurs Ekleyebilirsin</Text>
+        </TouchableOpacity>
+            )
           } 
    }else {
      console.log("neden")
