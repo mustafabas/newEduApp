@@ -4,7 +4,7 @@ import {
   Text,
   KeyboardAvoidingView,
   ScrollView,
-  Platform, TouchableOpacity,Alert, Dimensions
+  Platform, TouchableOpacity,Alert, Dimensions, ImageBackground
 } from "react-native";
 import { WebView } from 'react-native-webview';
 import { NavigationScreenProp, NavigationState } from "react-navigation";
@@ -114,18 +114,8 @@ renderLinkedin(){
 
     const { navigation,isSucceed,isFinished,isLoading,loginFirstStep } = this.props;
       loginFirstStep(values.email, values.password);
-      
-      console.log("sdsds")
-     
-      
-
+    
   };
-
-
- 
-
- 
- 
   render() {
     GoogleSignin.configure({
   iosClientId: '783786716269-c7k7r5hbfsd3t4oqu7df96c2c89ipqb0.apps.googleusercontent.com', // only for iOS
@@ -138,18 +128,15 @@ renderLinkedin(){
 
 
     return (
-      <View style={[styles.container,{backgroundColor:'#b80000',justifyContent:'flex-start'}]}>
+      <ImageBackground source={require('../../../assets/login-back.png')} style={{width: '100%', height: '100%'}}>
         {/* <LinearGradient style={{flex:1}} colors={['#ff4259', '#db5c6b', '#ffb5be']} > */}
        
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <ScrollView bounces={false}>
-           <TouchableOpacity onPress={()=> this.props.navigation.navigate('mainBottomTab')} style={{flexDirection:'row',marginTop:50,marginRight:20,justifyContent:'flex-end'}}>
-             <Text style={{fontSize:16,fontFamily:'Roboto-Regular',fontWeight:'500',marginTop:6,color:'white'}}>Geri don</Text>
-
-            <Icon name="chevron-right"  color="white" size={32} />
-
+           <TouchableOpacity onPress={()=> this.props.navigation.navigate('mainBottomTab')} style={{flexDirection:'row',marginTop:10,marginLeft:10,justifyContent:'flex-start'}}>
+            <Icon name="cancel"  color="white" size={32} />
            </TouchableOpacity>
           <Avatar imageProps={{resizeMode:'contain'}} size='large' rounded containerStyle={{alignSelf:'center',marginBottom:10,marginTop:Dimensions.get('window').height/5-80}} source={require('../../../assets/logo.png')} />
 
@@ -174,14 +161,14 @@ renderLinkedin(){
                       <Input
                         
                         inputContainerStyle={{borderWidth:1,borderRadius:5,borderColor:'#a31515',paddingLeft:10}}
-                        placeholder="email"
+                        placeholder="Email"
 
                         containerStyle={{marginBottom:5}}
                         inputStyle={{fontSize:15,color:'#4f4f4f',fontFamily:'OpenSans-Regular'}}
                         value={props.values.email}
                         onChangeText={props.handleChange("email")}
                         onBlur={props.handleBlur("email")}
-                        errorMessage= "Lutfen uygun bir kullanici adi girin"
+                        errorMessage= "Lütfen uygun bir email adresi giriniz"
                         errorStyle={{height: (props.touched.email && props.errors.email) ? 20 : 0,color:'#a31515'}}
                         // error={props.touched.email && props.errors.email}
                         // errorStyle={{borderBottomColor: (props.touched.email && props.errors.email) ? colors.accent : colors.borderColor}}
@@ -190,12 +177,12 @@ renderLinkedin(){
                       <Input
                       inputContainerStyle={{borderWidth:1,borderRadius:5,borderColor:'#a31515',paddingLeft:10}}
                       inputStyle={{fontSize:15,color:'#4f4f4f',fontFamily:'OpenSans-Regular'}}
-                        placeholder="Password"
+                        placeholder="Şifre"
                         value={props.values.password}
                         onChangeText={props.handleChange("password")}
                         onBlur={props.handleBlur("password")}
                         secureTextEntry
-                        errorMessage= "Lutfen uygun bir sifre girin"
+                        errorMessage= "Lütfen uygun bir şifre giriniz"
                         errorStyle={{height: (props.touched.password && props.errors.password) ? 20 : 0,color:'#a31515'}}
                           />
                           <View style={{flexDirection:'row',justifyContent:'space-between',marginLeft:15}}>
@@ -219,7 +206,7 @@ renderLinkedin(){
                         <Button loading={false} IsDisabled={false} onPress={()=>this.props.socialLogin(socialTypes.FACEBOOK)} text="Facebookla Baglan" style={{ marginHorizontal:10, borderRadius:5,backgroundColor:'#4267B2',shadowColor: '#4267B2',marginTop:0}}  />
 
      
-                        <View style={{flexDirection:'row',marginHorizontal:10,flex:1,marginBottom:10, justifyContent:'space-between'}}>
+                        <View style={{flexDirection:'row',marginHorizontal:10,flex:1,marginBottom:10, justifyContent:'center'}}>
               <NewButton titleStyle={{color:"black",fontFamily:'OpenSans-Regular',marginLeft:5}} buttonStyle={{backgroundColor:'white',
               shadowColor: '#6e72ff',
               shadowOffset: {width: 3, height: 3 },
@@ -272,7 +259,7 @@ onError={err => console.log(err)}
         {/* </LinearGradient> */}
        
 
-      </View>
+      </ImageBackground>
     );
   }
 }

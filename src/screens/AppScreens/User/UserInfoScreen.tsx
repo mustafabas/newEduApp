@@ -4,14 +4,14 @@ import {
   
   KeyboardAvoidingView,
   ScrollView,
-  Platform, TouchableOpacity, Image, StatusBar,StyleSheet, AsyncStorage
+  Platform, TouchableOpacity, Image, StatusBar,StyleSheet, AsyncStorage, ActivityIndicator
 } from "react-native";
 import { NavigationScreenProp, NavigationState, SafeAreaView } from "react-navigation";
 import {Text,} from 'react-native-elements'
 import { Formik } from "formik";
 import * as Yup from "yup";
 
-import { controlUsername } from "../../../redux/actions/signupActions";
+
 import {getUserInformation, IUser, EditProfile } from '../../../redux/actions/userAction'
 import { Button, FloatingLabelInput } from "../../../components";
 import newStyles from "../../AuthScreens/Login/styles";
@@ -31,6 +31,10 @@ interface Props {
   user : IUser;
 
 }
+interface UserInfoState{
+  userIsLogin?:boolean;
+  refreshing:boolean;
+}
 
 const loginSchema = Yup.object().shape({
   username: Yup.string()
@@ -42,7 +46,7 @@ const loginSchema = Yup.object().shape({
 });
 
 
-class UserInfoScreen extends Component<Props, {}> {
+class UserInfoScreen extends Component<Props, UserInfoState> {
 
 
   static navigationOptions = {
@@ -68,9 +72,8 @@ class UserInfoScreen extends Component<Props, {}> {
     super(props);
 
     this.state = {
-      
       refreshing: false,
-      userIsLogin : false
+      userIsLogin:undefined
     };
 
   }
@@ -84,7 +87,7 @@ class UserInfoScreen extends Component<Props, {}> {
           this.setState({userIsLogin : true})
         }
         else {
-
+            this.setState({userIsLogin:false})
         }
       });
       } catch (err) {
@@ -95,8 +98,8 @@ renderMainComponents(){
   if(this.state.userIsLogin) {
     return(
 <View>
-<View style={{ paddingTop: 70, alignItems: 'center' }}>
-              <Avatar
+<View style={{ paddingTop: 20, alignItems: 'center' }}>
+              {/*<Avatar
                 onPress={() => this.props.navigation.navigate('App')}
                 rounded
                 size="large"
@@ -106,10 +109,10 @@ renderMainComponents(){
                 }}
                 showEditButton
               />
-
+              */}
 
             </View>
-            <View style={[newStyles.inputContainer,{ paddingTop:25,marginTop:40,paddingBottom:30,justifyContent:'flex-start' }]}>
+            <View style={[newStyles.inputContainer,{ paddingTop:10, marginTop:10,paddingBottom:30,justifyContent:'flex-start' }]}>
 
               {/* <Input value="bilal oguz marifet" inputStyle={{ color: Colors.text, fontFamily: 'Roboto-Regular' }} containerStyle={{ marginLeft: -10, marginTop: 20 }} />
               <Input value="bilalmarifet@gmail.com" inputStyle={{ color: Colors.text, fontFamily: 'Roboto-Regular' }} containerStyle={{ marginLeft: -10, marginTop: 20 }} />
@@ -127,7 +130,7 @@ renderMainComponents(){
               </Button> */}
 
 
-              <Text style={{textAlign:'center'}} h4>Bilal Oguz Marifet</Text>
+              <Text style={{textAlign:'center', fontSize:16}} h4>Bilal Oguz Marifet</Text>
               <View style={{marginTop:20}}>
               <TouchableOpacity onPress={()=> this.props.getUserInformation(EditProfile.generalInfo)} style={styles.profileContainer}>
                 <Icon name="account" type="material-community" color="#d67676" size={25} />
@@ -178,7 +181,7 @@ renderMainComponents(){
             */}
 </View>
     )
-  }else {
+  }else if(this.state.userIsLogin==false) {
     return(
       <View style={[newStyles.inputContainer,{ paddingTop:25,marginTop:60,paddingBottom:30,justifyContent:'flex-start' }]}>
 
@@ -226,6 +229,9 @@ renderMainComponents(){
 
             </View>
     )
+  }
+  else{
+    return (<ActivityIndicator></ActivityIndicator>)
   }
 }
   

@@ -78,7 +78,15 @@ class CartScreen extends Component<Props> {
         return basket;
       }
 
-
+      _renderTotalAmount(){
+if(this.props.courses.length>0){
+return (       <View style={{width:'100%',padding:10,flexDirection:'row',justifyContent:'space-between',backgroundColor:'#ffe3e3'}}>
+{this._renderDiscountText()}
+<Button onPress={()=> this.userIsLogin()} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
+         
+</View>);
+}
+      }
   _renderDiscountText(){
     if(this.props.courseAmount.displayDiscountAmount) {
          return(
@@ -225,12 +233,8 @@ class CartScreen extends Component<Props> {
        
        
         </ScrollView>
-        
-       <View style={{width:'100%',padding:10,flexDirection:'row',justifyContent:'space-between',backgroundColor:'#ffe3e3'}}>
-           {this._renderDiscountText()}
-           <Button onPress={()=> this.userIsLogin()} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
-                    
-       </View>
+        {this._renderTotalAmount()}
+
 
       </SafeAreaView>
     );
