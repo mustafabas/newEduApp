@@ -135,7 +135,7 @@ renderLinkedin(){
           behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
           <ScrollView bounces={false}>
-           <TouchableOpacity onPress={()=> this.props.navigation.navigate('mainBottomTab')} style={{flexDirection:'row',marginTop:10,marginLeft:10,justifyContent:'flex-start'}}>
+           <TouchableOpacity onPress={()=> this.props.navigation.navigate('mainBottomTab')} style={{flexDirection:'row',marginTop:50,marginLeft:10,justifyContent:'flex-start'}}>
             <Icon name="cancel"  color="white" size={32} />
            </TouchableOpacity>
           <Avatar imageProps={{resizeMode:'contain'}} size='large' rounded containerStyle={{alignSelf:'center',marginBottom:10,marginTop:Dimensions.get('window').height/5-80}} source={require('../../../assets/logo.png')} />
@@ -206,7 +206,7 @@ renderLinkedin(){
                         <Button loading={false} IsDisabled={false} onPress={()=>this.props.socialLogin(socialTypes.FACEBOOK)} text="Facebookla Baglan" style={{ marginHorizontal:10, borderRadius:5,backgroundColor:'#4267B2',shadowColor: '#4267B2',marginTop:0}}  />
 
      
-                        <View style={{flexDirection:'row',marginHorizontal:10,flex:1,marginBottom:10, justifyContent:'center'}}>
+                        <View style={{flexDirection:'row',marginHorizontal:10,flex:1,marginBottom:10, justifyContent:'space-evenly'}}>
               <NewButton titleStyle={{color:"black",fontFamily:'OpenSans-Regular',marginLeft:5}} buttonStyle={{backgroundColor:'white',
               shadowColor: '#6e72ff',
               shadowOffset: {width: 3, height: 3 },
@@ -255,10 +255,10 @@ onError={err => console.log(err)}
               }}
             </Formik>
             <View style={{flexDirection:'row',flexWrap: 'wrap',justifyContent:'center',marginTop:10}}>
-                <Text style={{fontSize:16 ,fontWeight:'100'}}>Giriş yaparak </Text>
-                <TouchableOpacity><Text style={{fontSize:16}}>kullanıcı sözleşmesini</Text></TouchableOpacity>
-                  <Text style={{fontSize:16 ,fontWeight:'100'}}> ve </Text><TouchableOpacity>
-                    <Text style={{fontSize:16}}>gizlilik sözleşmesini </Text></TouchableOpacity><Text style={{fontSize:16 ,fontWeight:'100'}}> kabul etmiş sayılırsınız</Text>
+                <Text style={{fontSize:16 ,fontWeight:'200', color:'white'}}>Giriş yaparak </Text>
+                <TouchableOpacity onPress={()=> this.props.navigation.navigate('userAgreement')}><Text style={{fontSize:16,color:'white'}}>kullanıcı sözleşmesini</Text></TouchableOpacity>
+                  <Text style={{fontSize:16 ,fontWeight:'200',color:'white'}}> ve </Text><TouchableOpacity onPress={()=> this.props.navigation.navigate('UsersPrivacy')}>
+                    <Text style={{fontSize:16,color:'white'}}>gizlilik sözleşmesini </Text></TouchableOpacity><Text style={{fontSize:16 ,fontWeight:'200',color:'white'}}> kabul etmiş sayılırsınız</Text>
               </View>
               
           </ScrollView>

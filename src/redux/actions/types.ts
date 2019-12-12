@@ -29,6 +29,7 @@ export const COURSE_ITEM_LOADING = "COURSE_ITEM_LOADING";
 export const COURSE_VIDEO_DETAIL_INFO = "courseVideoDetailInfo"
 export const RESET_PROPS = "resetProps";
 export const COURSE_IS_ADDED = "courseIsAdded";
+export const COURSE_IS_SELECTED_LOADING = "courseSelectedIsLoading"
 export const RESET_MESSAGE = "resetMessage";
 
 

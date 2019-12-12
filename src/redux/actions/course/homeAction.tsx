@@ -3,11 +3,12 @@ import { AsyncStorage } from "react-native";
 import axios from 'axios'
 import { EDU_API_LOGIN, EDU_API_COURSES,EDU_API_GET_COURSE_INFO, EDU_API_GET_ORDERED_COURSES } from '../../../constants'
 import { Dispatch } from "react";
-import { HOME_LOADING, HOME_GET_COURSE,COURSE_ITEM_LOADING,COURSE_VIDEO_DETAIL_INFO, COURSE_IS_ADDED, RESET_MESSAGE } from './../types'
+import { HOME_LOADING, HOME_GET_COURSE,COURSE_ITEM_LOADING,COURSE_VIDEO_DETAIL_INFO, COURSE_IS_ADDED, RESET_MESSAGE, COURSE_IS_SELECTED_LOADING } from './../types'
 import { Action } from "redux";
 import { ICourseItem,ICourseBase, ICourseVideoSection, IVideoModel } from "../../../models/course/coruseItem";
 import { ICourseItemRequest } from "../../../models/course/courseItemRequest";
 import { navigate } from "../../services/Navigator";
+import { type } from "os";
 
 
 
@@ -25,7 +26,7 @@ export function addToCartOrRemove(courseTypeTmp:courseType,id : string , courseB
      
  return async (dispatch : Dispatch<Action>) => {
 
-        
+          dispatch(loadingForButtons(id,true))
           let products  =  await AsyncStorage.getItem('products')
           let isAdded = false
           let newProduct : localType[] =[];
@@ -81,6 +82,7 @@ export function addToCartOrRemove(courseTypeTmp:courseType,id : string , courseB
  .catch( ()=>{
  console.log('There was an error saving the product')
  } )
+ dispatch(loadingForButtons(id,false))
  dispatch(loading(true));
  dispatch(homeDatas(courseBase));
  dispatch(showMessage(isAdded))
@@ -275,4 +277,9 @@ export const showMessage = (isAdded : boolean)  => ({
 
 export const resetMessage = () => ({
     type : RESET_MESSAGE
+})
+
+export const loadingForButtons =  (id : string, loading: boolean) => ({
+    type: COURSE_IS_SELECTED_LOADING,
+    payload : [id,loading]
 })

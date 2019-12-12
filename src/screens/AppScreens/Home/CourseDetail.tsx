@@ -73,7 +73,7 @@ class CourseDetail extends Component<Props> {
   static navigationOptions = ({navigation}) => ({
     title: navigation.getParam('headerTitle'),
     headerStyle: {
-      backgroundColor: '#d67676',
+      backgroundColor: '#e83537',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

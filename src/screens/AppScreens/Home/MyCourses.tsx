@@ -47,7 +47,7 @@ class MyCourses extends Component<Props, {}> {
     title: 'Kurslarim',
 
     headerStyle: {
-      backgroundColor: '#d67676',
+      backgroundColor: '#e83537',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

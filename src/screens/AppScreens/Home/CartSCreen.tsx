@@ -82,7 +82,7 @@ class CartScreen extends Component<Props> {
 if(this.props.courses.length>0){
 return (       <View style={{width:'100%',padding:10,flexDirection:'row',justifyContent:'space-between',backgroundColor:'#ffe3e3'}}>
 {this._renderDiscountText()}
-<Button onPress={()=> this.userIsLogin()} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#db5c6b' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
+<Button onPress={()=> this.userIsLogin()} disabled={this.props.courses.length<1} buttonStyle={{ backgroundColor: '#e83537' }} title="Alisverisi Tamamla"  containerStyle={{  }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
          
 </View>);
 }
@@ -133,7 +133,7 @@ return (       <View style={{width:'100%',padding:10,flexDirection:'row',justify
     title: 'Sepet',
 
     headerStyle: {
-      backgroundColor: '#d67676',
+      backgroundColor: '#e83537',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

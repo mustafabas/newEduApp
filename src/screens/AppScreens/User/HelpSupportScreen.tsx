@@ -45,7 +45,7 @@ class HelpSupportScreen extends Component<Props, {}> {
     title: 'Yardim ve Destek',
 
     headerStyle: {
-      backgroundColor: '#d67676',
+      backgroundColor: '#e83537',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

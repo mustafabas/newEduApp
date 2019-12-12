@@ -46,7 +46,7 @@ export class Button extends Component<Props, {}>{
 
     return(
 
-      <TouchableOpacity  {...this.props} disabled={IsDisabled} style={[styles.buttonStyle,{backgroundColor:IsDisabled ? '#b09295' : '#db5c6b',shadowColor : IsDisabled ? '#b09295' : '#db5c6b'},this.props.style]}>
+      <TouchableOpacity  {...this.props} disabled={IsDisabled} style={[styles.buttonStyle,{backgroundColor:IsDisabled ? '#db7273' : '#e83537',shadowColor : IsDisabled ? '#db7273' : '#e83537'},this.props.style]}>
 
        
         <Text style = {styles.buttonTextStyle}>

@@ -13,7 +13,8 @@ export interface HomeState {
   CourseVideoSection : ICourseVideoSection;
   addedToChart : boolean;
   removedFromChart : boolean;
-  
+  loadingButtonItem : boolean,
+  selectedButtonId : string,
 }
 
 

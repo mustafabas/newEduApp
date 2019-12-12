@@ -47,6 +47,8 @@ interface NavStateParams {
   loading: boolean;
   addToCartOrRemove : (courseType : courseType,id : string, courseBase : ICourseBase) => void;
   getCourseDetail : (id : string,isCheckouted : boolean ) => void;
+  loadingButtonItem : boolean;
+  selectedButtonId : string,
 
   itemLoading : boolean;
 
@@ -201,7 +203,7 @@ renderBottomButton(){
   }else {
     return (
       <View style={{width:'100%',flexDirection:'row',justifyContent:'center',backgroundColor:'#ffe3e3'}}>
-      <Button disabled={this.props.courseBase.isOrdered} onPress={()=> this.props.addToCartOrRemove(courseType.COURSE_ALL,this.props.courseBase.courseId.toString(),this.props.courseBase)} buttonStyle={{ backgroundColor: '#db5c6b' ,marginTop:10}} title={this.props.courseBase.isOrdered ? 'Kurs Satin Alindi' : `Tüm Kurs${this.props.courseBase.isCheckout ? '' : 'u' }  ${this.props.courseBase.priceDisplayName} ye Sepete Ek${this.props.courseBase.isCheckout ? 'lendi' : 'le'}`} containerStyle={{ width: '90%', alignSelf: 'center', marginBottom: 10 }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 16, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
+      <Button loading={this.props.loadingButtonItem && (this.props.selectedButtonId === this.props.courseBase.courseId.toString())} disabled={this.props.courseBase.isOrdered} onPress={()=> this.props.addToCartOrRemove(courseType.COURSE_ALL,this.props.courseBase.courseId.toString(),this.props.courseBase)} buttonStyle={{ backgroundColor: '#e83537' ,marginTop:10}} title={this.props.courseBase.isOrdered ? 'Kurs Satin Alindi' : `Tüm Kurs${this.props.courseBase.isCheckout ? '' : 'u' }  ${this.props.courseBase.priceDisplayName} ye Sepete Ek${this.props.courseBase.isCheckout ? 'lendi' : 'le'}`} containerStyle={{ width: '90%', alignSelf: 'center', marginBottom: 10 }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 16, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
            
      </View>
     )
@@ -242,12 +244,12 @@ renderScrollViewContent() {
 
               <View style={{ flexDirection: 'row', marginTop: 10 }}>
 
-              <Button disabled={item.isAddedFromBase || item.isOrdered} onPress={()=>this.props.addToCartOrRemove(courseType.COURSE_ONE,item.id.toString(),this.props.courseBase)} buttonStyle={{ backgroundColor: '#db5c6b' }} title={item.isOrdered ? "Satin Alindi" : (item.IsCheckout || item.isAddedFromBase) ? "Sepete Eklendi" : "Sepete Ekle"}  containerStyle={{ flex:0.5 }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
+              <Button loading={this.props.loadingButtonItem && (this.props.selectedButtonId === item.id.toString())} disabled={item.isAddedFromBase || item.isOrdered} onPress={()=>this.props.addToCartOrRemove(courseType.COURSE_ONE,item.id.toString(),this.props.courseBase)} buttonStyle={{ backgroundColor: '#e83537' }} title={item.isOrdered ? "Satin Alindi" : (item.IsCheckout || item.isAddedFromBase) ? "Sepete Eklendi" : "Sepete Ekle"}  containerStyle={{ flex:0.5 }} titleStyle={{ fontFamily: 'Roboto-Regular', fontSize: 15, marginLeft: 7 }} icon={<Icon name="basket" color="white" />} />
    
                <View style={{flex:0.5, flexDirection:'row', justifyContent:'flex-end'}}>
                 <Text style={{fontSize:15, fontWeight:'700', flex:0.6,marginTop:7}}>{item.displayPrice}</Text>
                 <TouchableOpacity style={{alignContent:'flex-end', justifyContent:'flex-end',marginTop:-30 }} onPress={()=>this.props.getCourseDetail(item.id.toString(),false)} >
-                  <Icon name="eye" color='#db5c6b' style={{ marginTop: 4, flex:0.2 }} size={25} />
+                  <Icon name="eye" color='#e83537' style={{ marginTop: 4, flex:0.2 }} size={25} />
 
                 </TouchableOpacity>
                 </View>
@@ -384,7 +386,7 @@ renderScrollViewContent() {
             },
           ]}
         >
-          <Header backgroundColor="#d67676"
+          <Header backgroundColor="#e83537"
             // leftComponent={{ icon: 'menu', color: '#fff' }}
             centerComponent={{ text: 'SPPSS EĞİTİMİ', style: { color: '#fff' } }}
             // rightComponent={{ icon: 'home', color: '#fff' }}
@@ -411,7 +413,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#d67676',
+    backgroundColor: '#e83537',
     overflow: 'hidden',
     height: HEADER_MAX_HEIGHT,
     borderWidth: 0,
@@ -463,7 +465,10 @@ const mapStateToProps = (state: AppState) => ({
   loading: state.home.loading,
   courseBase: state.home.courseBase,
   addedToChart : state.home.addedToChart,
-  removedFromChart: state.home.removedFromChart
+  removedFromChart: state.home.removedFromChart,
+  loadingButtonItem : state.home.loadingButtonItem,
+  selectedButtonId : state.home.selectedButtonId,
+
 })
 
 function bindToAction(dispatch: any) {

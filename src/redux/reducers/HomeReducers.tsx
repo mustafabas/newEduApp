@@ -1,4 +1,4 @@
-import { HOME_GET_COURSE, HOME_LOADING,COURSE_ITEM_LOADING, COURSE_VIDEO_DETAIL_INFO, COURSE_IS_ADDED, RESET_MESSAGE } from "../actions/types";
+import { HOME_GET_COURSE, HOME_LOADING,COURSE_ITEM_LOADING, COURSE_VIDEO_DETAIL_INFO, COURSE_IS_ADDED, RESET_MESSAGE, COURSE_IS_SELECTED_LOADING } from "../actions/types";
 import { Action } from "../../models/action";
 import { HomeState } from "../../models/state";
 import { ICourseVideoSection, ICourseBase } from "../../models/course/coruseItem";
@@ -11,6 +11,9 @@ const intialState = {
   CourseVideoSection : {} as ICourseVideoSection,
   addedToChart : false,
   removedFromChart : false,
+  loadingButtonItem : false,
+  selectedButtonId : "",
+
 };
 
 export default (state: HomeState = intialState, action: Action) => {
@@ -48,6 +51,12 @@ export default (state: HomeState = intialState, action: Action) => {
           addedToChart : false,
           removedFromChart : false
         };
+        case COURSE_IS_SELECTED_LOADING: 
+        return {
+          ...state,
+          loadingButtonItem : action.payload[1],
+          selectedButtonId : action.payload[0],
+        }
     default:
       return {...state};
   }

@@ -38,7 +38,8 @@ import SettingsScreen from '../screens/AppScreens/User/SettingsScreen';
 import HelpSupportScreen from '../screens/AppScreens/User/HelpSupportScreen'
 import UserGivenOrderScreen from '../screens/AppScreens/User/UserGivenOrderScreen'
 import securityProfileEditScreen from '../screens/AppScreens/User/securityProfileEditScreen'
-
+import UsersAgreementScreen from '../screens/AuthScreens/Login/UsersAgreementScreen'
+import UsersPrivacyScreen from '../screens/AuthScreens/Login/UsersPrivacyScreen'
 
 const myCourse = createStackNavigator({
   MyCourse : MyCourses,
@@ -164,8 +165,8 @@ const mainBottomTab = createBottomTabNavigator({
     
   }),
   tabBarOptions: {
-    activeTintColor: '#d67676',
-    inactiveTintColor: '#d67676',
+    activeTintColor: '#e83537',
+    inactiveTintColor: '#e83537',
   },
 }
 );
@@ -191,8 +192,6 @@ EducationVideoStack.navigationOptions = ({ navigation }) => {
 
 
 
-
-
 const AuthStack = createStackNavigator(
   {
     
@@ -200,14 +199,16 @@ const AuthStack = createStackNavigator(
     SignUpFirst : SignUpFirstScreen,
     SignUpSecond : SignUpSecondScreen,
     SignUpPhoneVerify : SignUpSecondPhoneVerificationScreen,
-    LoginPhoneVerify : LoginPhoneVerifyScreen
+    LoginPhoneVerify : LoginPhoneVerifyScreen,
+    userAgreement : UsersAgreementScreen,
+    UsersPrivacy : UsersPrivacyScreen
   },
   {
     initialRouteName: "Login",
     // headerMode: "none"
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#d67676',
+        backgroundColor: '#e83537',
       },
       headerTintColor: '#fff',
       headerTitleStyle: {

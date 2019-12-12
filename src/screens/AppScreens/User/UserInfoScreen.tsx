@@ -53,7 +53,7 @@ class UserInfoScreen extends Component<Props, UserInfoState> {
     title: 'Profilim',
 
     headerStyle: {
-      backgroundColor: '#d67676',
+      backgroundColor: '#e83537',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
@@ -73,7 +73,8 @@ class UserInfoScreen extends Component<Props, UserInfoState> {
 
     this.state = {
       refreshing: false,
-      userIsLogin:undefined
+      userIsLogin:undefined,
+      iconColor : "#e83537"
     };
 
   }
@@ -133,37 +134,37 @@ renderMainComponents(){
               <Text style={{textAlign:'center', fontSize:16}} h4>Bilal Oguz Marifet</Text>
               <View style={{marginTop:20}}>
               <TouchableOpacity onPress={()=> this.props.getUserInformation(EditProfile.generalInfo)} style={styles.profileContainer}>
-                <Icon name="account" type="material-community" color="#d67676" size={25} />
+                <Icon name="account" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Profili Duzenle</Text>
                
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
               <TouchableOpacity onPress={()=> this.props.getUserInformation(EditProfile.securityInfo)} style={styles.profileContainer}>
-                <Icon name="lock-reset" type="material-community" color="#d67676" size={25} />
+                <Icon name="lock-reset" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Güvenlik</Text>
                 
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
               <TouchableOpacity onPress={()=> this.props.navigation.navigate('Notification')} style={styles.profileContainer}>
-                <Icon name="bell" type="material-community" color="#d67676" size={25} />
+                <Icon name="bell" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Bildirim Ayarlari</Text>
                 
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
 
               <TouchableOpacity onPress={()=> this.props.navigation.navigate('HelpSupport')} style={styles.profileContainer}>
-                <Icon name="face-agent" type="material-community" color="#d67676" size={25} />
+                <Icon name="face-agent" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Yardim ve Destek</Text>
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
               <TouchableOpacity onPress={()=> this.props.navigation.navigate('UserGivenOrder')} style={styles.profileContainer}>
-                <Icon name="basket" type="material-community" color="#d67676" size={25} />
+                <Icon name="basket" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Siparislerim</Text>
                 
               </TouchableOpacity>
               <View style={styles.propsSeperator}></View>
               <TouchableOpacity onPress={() => logoutUserService()} style={styles.profileContainer}>
-                <Icon name="logout" type="material-community" color="#d67676" size={25} />
+                <Icon name="logout" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Cikis Yap</Text>
                 
               </TouchableOpacity>
@@ -204,7 +205,7 @@ renderMainComponents(){
               {/* <Text style={{textAlign:'center'}} h4>Bilal Oguz Marifet</Text> */}
               <View style={{marginBottom:20}}>
               <TouchableOpacity  style={styles.profileContainer}>
-                <Icon name="help-rhombus" type="material-community" color="#d67676" size={25} />
+                <Icon name="help-rhombus" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Sikca Sorulan Sorular</Text>
                
               </TouchableOpacity>
@@ -212,13 +213,13 @@ renderMainComponents(){
               <View style={styles.propsSeperator}></View>
 
               <TouchableOpacity onPress={()=> this.props.navigation.navigate('HelpSupport')} style={styles.profileContainer}>
-                <Icon name="face-agent" type="material-community" color="#d67676" size={25} />
+                <Icon name="face-agent" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Yardim ve Destek</Text>
               </TouchableOpacity>
               
               <View style={styles.propsSeperator}></View>
               <TouchableOpacity onPress={()=> this.props.navigation.navigate('AuthLoading')}  style={styles.profileContainer}>
-                <Icon name="logout" type="material-community" color="#d67676" size={25} />
+                <Icon name="logout" type="material-community" color={this.state.iconColor} size={25} />
                 <Text style={styles.profileTextStyle}>Giris Yap</Text>
                 
               </TouchableOpacity>

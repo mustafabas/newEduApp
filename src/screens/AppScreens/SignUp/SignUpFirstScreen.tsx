@@ -52,7 +52,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
     title: 'Kullanıcı Bilgileri',
 
     headerStyle: {
-      backgroundColor: '#d67676',
+      backgroundColor: '#e83537',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

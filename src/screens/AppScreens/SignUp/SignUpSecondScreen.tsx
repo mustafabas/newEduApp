@@ -46,7 +46,7 @@ class SignUpSecondScreen extends Component<Props, {}> {
     title: 'Parola Seçimi',
 
     headerStyle: {
-      backgroundColor: '#d67676',
+      backgroundColor: '#e83537',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {

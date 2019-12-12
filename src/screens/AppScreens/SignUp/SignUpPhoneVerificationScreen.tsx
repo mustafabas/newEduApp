@@ -56,7 +56,7 @@ class SignUpSecondPhoneVerificationScreen extends Component<Props, {}> {
     title: 'Telefon Onayı',
 
     headerStyle: {
-      backgroundColor: '#d67676',
+      backgroundColor: '#e83537',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
