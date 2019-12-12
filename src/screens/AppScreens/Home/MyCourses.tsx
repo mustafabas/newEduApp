@@ -136,7 +136,7 @@ class MyCourses extends Component<Props, {}> {
      console.log(this.state.userIsLogin)
      return(
       <TouchableOpacity onPress={()=>this.props.navigation.navigate('AuthLoading')} style={{flex:1,margin:30,paddingVertical:20,borderWidth:1,borderColor:'#c2c2c2',borderRadius:5,padding:10,alignItems:'center'}}>
-          <Text style={{textAlign:'center',color:'#a14040',fontFamily:'Roboto-Regular',fontSize:16}}>kurs eklemek icin giris yapin</Text>
+          <Text style={{textAlign:'center',color:'#a14040',fontFamily:'Roboto-Regular',fontSize:16}}>Kurslarınızı görebilmek için kayıt olun veya giriş yapın</Text>
         </TouchableOpacity>
      )
    }

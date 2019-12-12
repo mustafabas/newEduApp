@@ -54,12 +54,10 @@ const myCourse = createStackNavigator({
 const EducationVideoStack = createStackNavigator({
   Home : HomeScreen,
   CourseDetail: { screen :CourseDetail },
-
   Video: VideoScreen
-
 },{
   navigationOptions : {
-    tabBarLabel : 'Ana Sayfa'
+    tabBarLabel : 'Anasayfa'
   }
 })
 

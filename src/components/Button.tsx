@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonTextStyle: {
-    color: colors.containerBg,
+    color: '#fff',
     fontWeight: "700",
     fontSize: 16,
     fontFamily:'OpenSans-Regular'

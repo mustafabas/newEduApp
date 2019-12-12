@@ -109,31 +109,31 @@ class SignUpFirstScreen extends Component<Props, {}> {
                         Build Something Amazing
                       </Text>
                     </View> */}
-                    <Text h3  style={{fontFamily:'OpenSans-Regular', alignSelf: 'center', marginTop: 30}}> Email Adresiniz</Text>
-                    <Text style={{ fontFamily:'OpenSans-Regular',alignSelf: 'center', marginTop: 5}}> Hesabini olusturmak icin mailini yaz.</Text>
+                    <Text h3  style={{fontFamily:'OpenSans-Regular', alignSelf: 'center', marginTop: 30}}> Kullanıcı Bilgileri</Text>
+                    <Text style={{ fontFamily:'OpenSans-Regular',alignSelf: 'center', marginTop: 5}}> Hesabınızı oluşturmak için kullanıcı bilgilerini yazınız</Text>
                     <View style={[styles.inputContainer,{padding:10,marginTop:20}]}>
                     <Input
                         inputStyle={{fontFamily:'OpenSans-Regular',fontSize:15}}
-                        placeholder="İsim soyisim"
+                        placeholder="Adınız Soyadınız"
                         style={{fontFamily:'OpenSans-Regular'}}
                         value={props.values.nameSurname}
                         onChangeText={props.handleChange("nameSurname")}
                         onBlur={props.handleBlur("nameSurname")}
                         // error={props.touched.email && props.errors.email}
-                        errorMessage= "Lutfen uygun bir isim giriniz"
+                        errorMessage= "Lütfen isminizi giriniz"
                         errorStyle={{height: (props.touched.nameSurname && props.errors.nameSurname) ? 20 : 0,color:'#a31515'}}
                         
                         
                       />
                       <Input
                         inputStyle={{fontFamily:'OpenSans-Regular',fontSize:15}}
-                        placeholder="email"
+                        placeholder="Email Adresiniz"
                         style={{fontFamily:'OpenSans-Regular'}}
                         value={props.values.email}
                         onChangeText={props.handleChange("email")}
                         onBlur={props.handleBlur("email")}
                         // error={props.touched.email && props.errors.email}
-                        errorMessage= "Lutfen uygun bir email girin"
+                        errorMessage= "Lütfen uygun bir email giriniz"
                         errorStyle={{height: (props.touched.email && props.errors.email) ? 20 : 0,color:'#a31515'}}
                         
                         
@@ -142,7 +142,7 @@ class SignUpFirstScreen extends Component<Props, {}> {
 
                      
                       
-                        <Button loading={this.props.isLoadingCheck}  text="Continue" onPress={()=> props.handleSubmit()} />
+                        <Button loading={this.props.isLoadingCheck}  text="Devam Et" onPress={()=> props.handleSubmit()} />
                         
                        
                       
